@@ -12,12 +12,78 @@
             xintegrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
             crossorigin="anonymous"
         />
+        <link rel="stylesheet" href="./css/styles.css" />
     </head>
     <body>
-        <div class="container">
-            <div class="row jsutify-content-center">
-                <div class="col-md-4">Sales System</div>
-            </div>
+        <div class="container-fluid p-4">
+            <!-- Navbar -->
+            <nav class="navbar navbar-expand-lg navbar-custom mb-4">
+                <div class="container-fluid">
+                    <a class="navbar-brand d-flex align-items-center" href="#">
+                        <img
+                            src="https://placehold.co/40x40/28433b/FFFFFF?text=SSP"
+                            alt="sales system Logo"
+                            class="me-2 rounded-circle"
+                        />
+                        <span class="fw-bold text-success">SalesSystem</span>
+                    </a>
+                    <div class="d-flex align-items-center ms-auto">
+                        <a
+                            href="#"
+                            class="nav-link me-3 text-muted view-toggle"
+                            data-view="pos"
+                            >POS System</a
+                        >
+                        <a
+                            href="#"
+                            class="nav-link me-3 text-muted view-toggle active"
+                            data-view="dashboard"
+                            >Dashboard</a
+                        >
+                        <!-- <span class="me-3 text-muted">Thursday, 23 June</span>
+                        <span class="me-3 text-muted">Total: 20 Orders</span> -->
+                        <button
+                            class="btn btn-sm btn-outline-secondary me-3 rounded-md"
+                        >
+                            Report
+                        </button>
+                        <div class="position-relative me-3">
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                width="24"
+                                height="24"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                class="feather feather-bell"
+                            >
+                                <path
+                                    d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"
+                                ></path>
+                                <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+                            </svg>
+                            <span
+                                class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
+                                >4</span
+                            >
+                        </div>
+                        <div class="d-flex align-items-center">
+                            <img
+                                src="https://placehold.co/36x36/6B7280/FFFFFF?text=S"
+                                alt="User Avatar"
+                                class="rounded-full me-2"
+                            />
+                            <div>
+                                <div class="fw-bold">Samantha W</div>
+                                <small class="text-muted">Vendedor</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </nav>
         </div>
         <!-- Bootstrap 5.3.7 JS -->
         <script
