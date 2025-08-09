@@ -10,57 +10,59 @@ body {
     background-color: #eee !important;
 }
 
-.btn {
-    /* padding: 15px 28px; */
-    font-weight: 700;
+/*.btn {
+     padding: 15px 28px;
+    font-weight: 600;
     line-height: 1;
-}
+}*/
 
 .btn-rounded {
     border-radius: 24px;
 }
 
-.btn-outline-warning {
+/*.btn-outline-warning {
     padding: 15px 28px;
     color: #000;
     border: 1px solid #ff9900;
-}
+}*/
 
-.btn-outline-warning:hover {
+/*.btn-outline-warning:hover {
     padding: 15px 28px;
     color: #ff9900;
     border: #000;
     background-color: #ff9900;
-}
+}*/
 
-.btn-dark {
+/*.btn-dark {
     padding: 15px 28px;
     color: #fff;
     background-color: #000;
-}
+}*/
 
-.btn-dark:hover {
+/*.btn-dark:hover {
     padding: 15px 28px;
     color: #fff;
     background-color: #000;
-}
+}*/
 
-.btn-outline-dark {
+/*.btn-outline-dark {
     padding: 15px 28px;
     color: #000;
     border: 1px solid #000;
-}
+}*/
 
-.btn-outline-dark:hover {
+/*.btn-outline-dark:hover {
     padding: 15px 28px;
     color: #fff;
     background-color: #000;
-}
+}*/
 
-.card {
+/*.card {
     border-radius: 1.4rem;
+}*/
+.card-border{
+    border: none;
 }
-
 .carousel-inner {
     border-radius: 1.4rem;
 }
