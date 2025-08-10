@@ -1,0 +1,119 @@
+@import url("https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;500;600;700;800;900&display=swap");
+
+body {
+    background-color: #ffffff;
+    /* eee */
+    font-family: "Nunito", sans-serif;
+}
+
+.list-group-item.active {
+    color: #00000059 !important;
+    background-color: #E7EDF4 !important;
+    border-color: #E7EDF4;
+    border-radius: 1rem;
+}
+
+.list-group-item{
+    background-color: #F8FAFC;
+}
+.list-group-item:hover {
+    color: #00000059;
+}
+
+/*card*/
+.sidebar-card-bg{
+    background-color:  #F8FAFC;
+}
+
+.bg-metrics{
+    background-color: #CEDBE8;
+    border: none;
+}
+
+/*product modal*/
+
+.drag-drop-area {
+      border: 2px dashed #e2e8f0; /* Tailwind's gray-300 */
+      border-radius: 0.5rem;
+      padding: 2rem;
+      text-align: center;
+      cursor: pointer;
+      transition: background-color 0.2s ease;
+}
+.drag-drop-area:hover {
+    background-color: #f8fafc; /* */
+}
+
+/*order ::-webkit-validation-bubble-message tabs*/
+.nav-underline {
+    --nav-gap: 1rem;
+    display: flex;
+    gap: var(--nav-gap);
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: 0.25rem;
+}
+
+/* Estilo de cada botón/pestaña */
+.nav-underline .nav-link {
+    position: relative;
+    color: #222;
+    padding: 0.5rem 0.6rem;
+    border: none;
+    background: none;
+    border-radius: 0;
+    font-weight: 600;
+    white-space: nowrap;
+    transition: color .15s ease;
+}
+
+/* Líneas base al pasar el mouse */
+.nav-underline .nav-link::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    height: 3px;
+    bottom: -6px;
+    background: transparent;
+    transform-origin: center;
+    transform: scaleX(0);
+    transition: transform .18s ease, background .18s ease;
+    border-radius: 6px;
+}
+
+/* Hover */
+.nav-underline .nav-link:hover {
+    color: #0b5ed7;
+}
+.nav-underline .nav-link:hover::after {
+    background: rgba(11,93,215,0.12);
+    transform: scaleX(1);
+}
+
+/* Active (subrayado visible) */
+.nav-underline .nav-link.active {
+    color: #0b5ed7;
+}
+.nav-underline .nav-link.active::after {
+    background: #0b5ed7;
+    transform: scaleX(1);
+}
+
+/* Small screens: padding */
+@media (max-width: 576px) {
+    .nav-underline { gap: .5rem; padding-left: .25rem; padding-right: .25rem; }
+    .nav-underline .nav-link { padding: .5rem .4rem; font-size: .95rem; }
+}
+
+/* Estilos básicos de lista de pedidos (ejemplo) */
+.order-item { border: 1px solid #eef2f6; border-radius: .5rem; padding: 1rem; }
+.order-item + .order-item { margin-top: .75rem; }
+.order-status-badge { font-weight:600; padding:.25rem .55rem; border-radius:999px; font-size:.85rem; }
+.order-status-pending { background:#fff3cd; color:#8a6d00; }
+.order-status-shipping { background:#d1ecf1; color:#0c5460; }
+.order-status-delivered { background:#d4edda; color:#155724; }
+.danger-status{background-color: #F88379; }
+.category-bg{
+    background-color: #E7EDF4;
+}

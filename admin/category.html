@@ -81,27 +81,16 @@
 
              <!-- content -->
              <div class="col-md-9" >
-                <div class="mt-5 d-flex justify-content-between align-items-center flex-wrap gap-2">
-                    <div>
-                        <h3 class="fw-bold">Productos</h3>
-                    </div>
-                    <div class="flex-shrink-0">
-                        <button   class="btn btn-secondary text-nowrap" data-bs-toggle="modal" data-bs-target="#createProductModal">
-                         Crear producto
+                 <div class="mt-5 d-flex">
+                     <div class="p-2 w-100">
+                         <b>Categorias</b>
+                     </div>
+                     <div class="p-2">
+                         <button class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#modalCategoria">
+                             Crear Categoría
                         </button>
-                    </div>
-                </div>
-                 <br>
-
-                 <div class="col-md-9">
-                    <form class="d-flex" role="search">
-                        <input class="form-control me-2" type="search" placeholder="Buscar..." aria-label="Buscar">
-                        <!-- <button class="btn btn-primary" type="submit">
-
-                            Buscar pedidos
-                        </button> -->
-                    </form>
-                </div>
+                     </div>
+                 </div>
                  <br>
                     <!-- product table -->
                  <div class="card rounded-4">
@@ -113,11 +102,8 @@
                                      <table class="table table-hover ">
                                          <thead>
                                              <tr>
-                                                 <th scope="col"></th>
-                                                 <th scope="col">Producto</th>
-                                                 <th scope="col">Inventario</th>
-                                                 <th scope="col">Precio</th>
-                                                 <th scope="col">Categoria</th>
+                                                 <th scope="col">Nombre</th>
+                                                 <th scope="col">Productso</th>
                                                  <th scope="col">Estatus</th>
                                                  <th scope="col">Acciones</th>
                                              </tr>
@@ -125,24 +111,18 @@
                                          <tbody>
                                              <tr>
                                                  <th scope="row">
-                                                     <!-- <a href="" class="text-decoration-none fw-bold text-dark">#P20250972</a> -->
-                                                     <img src="https://placehold.co/400" class="rounded-circle" width="32">
+                                                     Pantalones
                                                  </th>
-                                                 <td>Polo American eaglr</td>
-                                                 <td>130  en stock </td>
-                                                 <td>$ 234.00</td>
+                                                 <td>104</td>
                                                  <td>
-                                                     <span class="badge category-bg text-dark">Ropa</span>
-                                                 </td>
-                                                 <td>
-                                                     <span class="badge order-status-delivered text-dark">Activo</span>
+                                                     <span class="badge text-bg-success">Activo</span>
                                                  </td>
                                                  <td>
                                                      <div class="d-flex justify-content-end">
-                                                       <a href="" class="me-2 text-decoration-none">
+                                                       <a href="" class="me-2 text-decoration-none text-dark">
                                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-square-pen-icon lucide-square-pen"><path d="M12 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.375 2.625a1 1 0 0 1 3 3l-9.013 9.014a2 2 0 0 1-.853.505l-2.873.84a.5.5 0 0 1-.62-.62l.84-2.873a2 2 0 0 1 .506-.852z"/></svg>
                                                        </a>
-                                                       <a href="" class="text-decoration-none">
+                                                       <a href="" class="text-decoration-none text-dark">
                                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-trash2-icon lucide-trash-2"><path d="M10 11v6"/><path d="M14 11v6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/><path d="M3 6h18"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
                                                        </a>
                                                      </div>
@@ -151,23 +131,18 @@
                                              </tr>
                                              <tr>
                                                  <th scope="row">
-                                                     <img src="https://placehold.co/400" class="rounded-circle" width="32">
+                                                     Mochilas
                                                  </th>
-                                                 <td>Polera eagle</td>
-                                                 <td>50 en stock </td>
-                                                 <td>$ 78.00</td>
+                                                 <td>144</td>
                                                  <td>
-                                                     <span class="badge category-bg text-dark">Ropa</span>
-                                                 </td>
-                                                 <td>
-                                                     <span class="badge order-status-delivered text-dark">Activo</span>
+                                                     <span class="badge text-bg-success">Activo</span>
                                                  </td>
                                                  <td>
                                                      <div class="d-flex justify-content-end">
-                                                       <a href="" class="me-2 text-decoration-none">
+                                                       <a href="" class="me-2 text-decoration-none text-dark">
                                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-square-pen-icon lucide-square-pen"><path d="M12 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.375 2.625a1 1 0 0 1 3 3l-9.013 9.014a2 2 0 0 1-.853.505l-2.873.84a.5.5 0 0 1-.62-.62l.84-2.873a2 2 0 0 1 .506-.852z"/></svg>
                                                        </a>
-                                                       <a href="" class="text-decoration-none">
+                                                       <a href="" class="text-decoration-none text-dark">
                                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-trash2-icon lucide-trash-2"><path d="M10 11v6"/><path d="M14 11v6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/><path d="M3 6h18"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
                                                        </a>
                                                      </div>
@@ -175,23 +150,18 @@
                                              </tr>
                                              <tr>
                                                  <th scope="row">
-                                                     <img src="https://placehold.co/400" class="rounded-circle" width="32">
+                                                    Zapatillas
                                                  </th>
-                                                 <td>Mochila especial</td>
-                                                 <td>13 en stock </td>
-                                                 <td>$ 23.00</td>
+                                                 <td>0</td>
                                                  <td>
-                                                     <span class="badge category-bg text-dark">Mochilas</span>
-                                                 </td>
-                                                 <td>
-                                                     <span class="badge order-status-delivered text-dark">Activo</span>
+                                                     <span class="badge text-bg-warning">Desactivado</span>
                                                  </td>
                                                  <td>
                                                      <div class="d-flex justify-content-end">
-                                                       <a href="" class="me-2 text-decoration-none">
+                                                       <a href="" class="me-2 text-decoration-none text-dark">
                                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-square-pen-icon lucide-square-pen"><path d="M12 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.375 2.625a1 1 0 0 1 3 3l-9.013 9.014a2 2 0 0 1-.853.505l-2.873.84a.5.5 0 0 1-.62-.62l.84-2.873a2 2 0 0 1 .506-.852z"/></svg>
                                                        </a>
-                                                       <a href="" class="text-decoration-none">
+                                                       <a href="" class="text-decoration-none text-dark">
                                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-trash2-icon lucide-trash-2"><path d="M10 11v6"/><path d="M14 11v6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/><path d="M3 6h18"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
                                                        </a>
                                                      </div>
@@ -199,23 +169,18 @@
                                              </tr>
                                              <tr>
                                                  <th scope="row">
-                                                     <img src="https://placehold.co/400" class="rounded-circle" width="32">
+                                                     Ropa
                                                  </th>
-                                                 <td>Zapatilla Puma</td>
-                                                 <td>0 en stock </td>
-                                                 <td>$ 23.00</td>
+                                                 <td>330</td>
                                                  <td>
-                                                     <span class="badge category-bg text-dark">Zapatilla</span>
-                                                 </td>
-                                                 <td>
-                                                     <span class="badge danger-status text-white">Desactivado</span>
+                                                     <span class="badge text-bg-success">Activo</span>
                                                  </td>
                                                  <td>
                                                      <div class="d-flex justify-content-end">
-                                                       <a href="" class="me-2 text-decoration-none">
+                                                       <a href="" class="me-2 text-decoration-none text-dark">
                                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-square-pen-icon lucide-square-pen"><path d="M12 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.375 2.625a1 1 0 0 1 3 3l-9.013 9.014a2 2 0 0 1-.853.505l-2.873.84a.5.5 0 0 1-.62-.62l.84-2.873a2 2 0 0 1 .506-.852z"/></svg>
                                                        </a>
-                                                       <a href="" class="text-decoration-none">
+                                                       <a href="" class="text-decoration-none text-dark">
                                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-trash2-icon lucide-trash-2"><path d="M10 11v6"/><path d="M14 11v6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/><path d="M3 6h18"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
                                                        </a>
                                                      </div>
@@ -229,73 +194,62 @@
                      </div>
                  </div>
 
-
                  <!-- product creation model -->
-                 <div class="modal fade" id="createProductModal" tabindex="-1" aria-labelledby="createProductModalLabel" aria-hidden="true">
-                     <div class="modal-dialog">
-                       <div class="modal-content rounded-3xl shadow-xl">
+                 <!-- Modal Crear Categoría -->
+                 <div class="modal fade" id="modalCategoria" tabindex="-1" aria-labelledby="modalCategoriaLabel" aria-hidden="true">
+                   <div class="modal-dialog">
+                     <div class="modal-content">
+                       <form id="formCategoria">
                          <div class="modal-header">
-                           <h5 class="modal-title text-2xl font-bold" id="createProductModalLabel">Agregar Producto</h5>
-                           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                           <h5 class="modal-title" id="modalCategoriaLabel">Agregar Categoría</h5>
+                           <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                          </div>
                          <div class="modal-body">
-                           <form id="createProductForm">
-                             <div class="mb-2">
-                               <label for="productName" class="form-label font-medium">Nombre Producto</label>
-                               <input type="text" class="form-control rounded-lg" id="productName" placeholder="Ingrese Nombre Producto" required>
-                             </div>
-                             <div class="mb-2">
-                               <label for="stockQuantity" class="form-label font-medium">Cantidad Stock</label>
-                               <input type="number" class="form-control rounded-lg" id="stockQuantity" placeholder="Ingrese cantidad stock" required>
-                             </div>
-                             <div class="mb-2">
-                               <label for="price" class="form-label  font-medium">Precio</label>
-                               <input type="number" step="0.01" class="form-control rounded-lg" id="price" placeholder="Ingresar precio" required>
-                             </div>
-                             <div class="mb-2">
-                               <label for="category" class="form-label font-medium">Category</label>
-                               <select class="form-select rounded-lg" id="category" required>
-                                 <option selected>Seleccionar categoria</option>
+
+                           <!-- Nombre Categoría -->
+                           <div class="mb-3">
+                             <label class="form-label">Nombre Categoría</label>
+                             <input type="text" class="form-control" name="nombre_categoria" placeholder="Ingrese nombre de categoría" required>
+                           </div>
+                           <div class="mb-3">
+                               <label for="producto" class="form-label font-medium">Asignar producto</label>
+                               <select class="form-select rounded-lg" id="producto" required>
+                                 <option selected>Seleccionar producto</option>
                                  <option value="1">Electrónica</option>
                                  <option value="2">Ropa</option>
                                  <option value="3">Hogar</option>
                                </select>
-                             </div>
+                           </div>
 
-                             <div class="mb-2">
-                                <p class="form-label font-medium">Estatus</p>
-                                <div class="flex gap-6">
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="radio" name="productStatus" id="statusActive" value="active" checked>
-                                        <label class="form-check-label" for="statusActive">
-                                            Activo
-                                        </label>
-                                    </div>
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="radio" name="productStatus" id="statusInactive" value="inactive">
-                                        <label class="form-check-label" for="statusInactive">
-                                            Desactivado
-                                        </label>
-                                    </div>
-                                </div>
-                             </div>
-                             <div class="mb-2">
-                               <label class="form-label font-medium">Cargar imagen de producto</label>
-                               <div class="drag-drop-area flex flex-col items-center justify-center">
-                                 <p class="text-sm">Drag & drop imagen o busque</p>
-                                 <button type="button" class="btn btn-secondary mt-3 rounded-full">Buscar</button>
-                                 <input type="file" class="d-none" id="fileUploadInput" accept="image/*">
+                           <!-- Descripción -->
+                           <div class="mb-3">
+                               <p class="form-label font-medium">Estatus</p>
+                               <div class="flex gap-6">
+                                   <div class="form-check">
+                                       <input class="form-check-input" type="radio" name="productStatus" id="statusActive" value="active" checked>
+                                       <label class="form-check-label" for="statusActive">
+                                           Activo
+                                       </label>
+                                   </div>
+                                   <div class="form-check">
+                                       <input class="form-check-input" type="radio" name="productStatus" id="statusInactive" value="inactive">
+                                       <label class="form-check-label" for="statusInactive">
+                                           Desactivado
+                                       </label>
+                                   </div>
                                </div>
-                             </div>
+                           </div>
 
-                             <div class="modal-footer p-0 border-0 pt-3">
-                               <button type="submit" class="btn btn-primary w-full py-3 rounded-lg font-bold shadow-lg">Agregar Producto</button>
-                             </div>
-                           </form>
                          </div>
-                       </div>
+                         <div class="modal-footer">
+                           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                           <button type="submit" class="btn btn-primary">Agregar Categoría</button>
+                         </div>
+                       </form>
                      </div>
+                   </div>
                  </div>
+
              </div>
          </div>
      </div>
