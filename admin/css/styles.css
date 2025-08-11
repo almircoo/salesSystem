@@ -4,8 +4,15 @@ body {
     background-color: #ffffff;
     /* eee */
     font-family: "Nunito", sans-serif;
+    /*color: #49739C !important;*/
 }
 
+.fs-color {
+   color:  #49739C;
+}
+.card-border-color{
+    border-bottom: #49739C;
+}
 .list-group-item.active {
     color: #00000059 !important;
     background-color: #E7EDF4 !important;
@@ -116,4 +123,13 @@ body {
 .danger-status{background-color: #F88379; }
 .category-bg{
     background-color: #E7EDF4;
+}
+
+
+/*TABLES*/
+tr{
+    border-color: #49739C;
+}
+td, th {
+    color: #49739C !important;
 }
