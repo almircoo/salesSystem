@@ -5,83 +5,46 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>Document</title>
         <link
-            href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+            href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css"
             rel="stylesheet"
-            integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
-            crossorigin="anonymous"
+
         />
         <
         <link rel="stylesheet" href="./css/styles.css" />
         <script src="./js/app.js"></script>
+        <link rel="stylesheet" href="https://unpkg.com/lucide@latest/dist/lucide.min.css">
     </head>
     <body>
         <!-- header -->
         <header class="">
-            <nav
-                class="navbar navbar-expand-lg navbar-ligh bg-light fixed-top border-0"
-            >
+            <nav class="navbar navbar-expand-lg navbar-ligh bg-light fixed-top border-0">
                 <div class="container">
-
-
-                    <a
-                        class="navbar-brand d-none d-md-block d-lg-block"
-                        href="/"
-                    >
-                        <img
-                            src="./images/logo.png"
-                            alt="logo"
-                            style="height: 20px"
-                        />
+                    <a class="navbar-brand d-none d-md-block d-lg-block"href="/" >
+                        <img src="./images/logo.png" alt="logo" style="height: 20px"/>
                     </a>
                     <a href="/" class="navbar-brand btn d-block d-md-none d-lg-none">
                         <img src="./images/logo.png" width="100" alt="">
                     </a>
-                    <a
-                        href=""
-                        class="navbar-brand btn btn-outline-dark d-block d-md-none d-lg-none"
-                    >
-                        <!-- <i data-lucide="shopping-cart"></i> -->
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-shopping-cart-icon lucide-shopping-cart"><circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"/></svg>
+                    <a href="cart.html" class="navbar-brand btn btn-outline-dark d-block d-md-none d-lg-none">
+                        <i data-lucide="shopping-cart"></i>
                         <span class="badge rounded-pill bg-dark"> 4 </span>
                     </a>
-                    <button
-                        class="navbar-toggler"
-                        type="button"
-                        data-bs-toggle="collapse"
-                        data-bs-target="#leadTogglerIcon"
-                        aria-controls="leadTogglerIcon"
-                        aria-expanded="false"
-                        aria-label="Toggle navigation"
-                    >
+                    <button  class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#leadTogglerIcon" aria-controls="leadTogglerIcon"aria-expanded="false" aria-label="Toggle navigation">
                         <span class="navbar-toggler-icon">
                         </span>
                     </button>
 
-                    <div
-                        class="collapse navbar-collapse text-center"
-                        id="leadTogglerIcon"
-                    >
+                    <div class="collapse navbar-collapse text-center" id="leadTogglerIcon">
                         <ul class="navbar-nav mx-auto mt-2 mt-lg-0">
-                            <form
-                                class="d-flex"
-                                action=""
-                                method="GET"
-                            >
-                                <input
-                                    class="form-control me-2"
-                                    type="search"
-                                    placeholder=" Buscar Productos..."
-                                    aria-label="Search"
-                                    name="keyword"
-                                    required
-                                />
+                            <form class="d-flex"  action="" method="GET">
+                                <input class="form-control me-2" type="search" placeholder=" Buscar Productos..." aria-label="Search" name="keyword" required/>
                             </form>
                         </ul>
 
                         <ul class="navbar-nav d-none d-md-block d-lg-block">
                             <li class="nav-item px-2 py-2">
-                                <a class="btn btn-outline-dark" href="">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-shopping-cart-icon lucide-shopping-cart"><circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"/></svg>
+                                <a class="btn btn-outline-dark" href="cart.html">
+                                    <i data-lucide="shopping-cart"></i>
                                     <span class="badge rounded-pill bg-dark">
                                         5
                                     </span>
@@ -91,76 +54,34 @@
 
                         <ul class="navbar-nav">
                             <li class="nav-item px-2 py-2">
-                                <a
-                                    href=""
-                                    class="btn btn-link text-decoration-none text-dark"
-                                >
+                                <a href="./admin/login.html" class="btn btn-link text-decoration-none text-dark" >
+                                    Admin
+                                </a>
+                            </li>
+                            <li class="nav-item px-2 py-2">
+                                <a href="login.html" class="btn btn-link text-decoration-none text-dark" >
                                     Iniciar Sesión
                                 </a>
                             </li>
                             <li class="nav-item px-2 py-2">
-                                <a
-                                    href=""
-                                    class="btn btn-dark"
-                                    >Registrarse</a
-                                >
+                                <a href="register.html" class="btn btn-dark">Registrarse</a>
                             </li>
                         </ul>
 
                         <ul class="navbar-nav">
                             <li class="nav-item dropdown">
-                                <a
-                                    href=""
-                                    class="nav-link dropdown-toggle dropdown-ico"
-                                    data-bs-toggle="dropdown"
-                                    style="color: #696d97"
-                                >
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-circle-user-icon lucide-circle-user"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="10" r="3"/><path d="M7 20.662V19a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v1.662"/></svg>
-                                    <!-- <img
-                                        src=""
-                                        class="img-fluid rounded-circle"
-                                        width="45px"
-                                    /> -->
+                                <a href="" class="nav-link dropdown-toggle dropdown-ico border-1" data-bs-toggle="dropdown" style="color: #696d97">
+                                    <i data-lucide="user-round"></i>
                                 </a>
-                                <div
-                                    class="dropdown-menu dropdown-menu-end rounded-3"
-                                >
+                                <div class="dropdown-menu dropdown-menu-end rounded-3" >
                                     <!-- <a href="#" class="dropdown-item">Reports</a> -->
-                                    <a href="" class="dropdown-item">
-                                        <svg
-                                            width="25"
-                                            height="25"
-                                            fill="none"
-                                            stroke="currentColor"
-                                            viewBox="0 0 24 24"
-                                            xmlns="http://www.w3.org/2000/svg"
-                                        >
-                                            <path
-                                                stroke-linecap="round"
-                                                stroke-linejoin="round"
-                                                stroke-width="2"
-                                                d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
-                                            ></path>
-                                        </svg>
+                                    <a href="profile.html" class="dropdown-item">
+                                        <i data-lucide="user-lock"></i>
                                         Cuenta
                                     </a>
                                     <div class="dropdown-divider"></div>
                                     <a href="" class="dropdown-item">
-                                        <svg
-                                            width="25"
-                                            height="25"
-                                            fill="none"
-                                            stroke="currentColor"
-                                            viewBox="0 0 24 24"
-                                            xmlns="http://www.w3.org/2000/svg"
-                                        >
-                                            <path
-                                                stroke-linecap="round"
-                                                stroke-linejoin="round"
-                                                stroke-width="2"
-                                                d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
-                                            ></path>
-                                        </svg>
+                                        <i data-lucide="log-out"></i>
                                         Cerrar Sesión
                                     </a>
                                 </div>
@@ -177,34 +98,13 @@
             <div class="row justify-content-center mt-5 py-5">
                 <div class="row justify-content-center">
                     <div class="col-lg-9">
-                        <a
-                            href=""
-                            class="btn float-start"
-                            style="
-                                background-color: #fff;
-                                border-radius: 1.5rem;
-                            "
-                        >
-                            <svg
-                                width="25"
-                                heigth="25"
-                                fill="none"
-                                stroke="currentColor"
-                                viewBox="0 0 24 24"
-                                xmlns="http://www.w3.org/2000/svg"
-                            >
-                                <path
-                                    stroke-linecap="round"
-                                    stroke-linejoin="round"
-                                    stroke-width="2"
-                                    d="M15 19l-7-7 7-7"
-                                ></path>
-                            </svg>
+                        <a href="products.html"   class="btn float-start" style="   background-color: #fff; border-radius: 1.5rem;">
+                            <i data-lucide="chevron-left"></i>
                         </a>
                         <div class="text-center">Detalles del Producto</div>
                         <br />
                         <br />
-                        <div class="card rounded-5">
+                        <div class="card rounded-4">
                             <div class="row">
                                 <div class="col-md-6">
                                     <figure class="figure">
@@ -235,46 +135,12 @@
                                 <div class="col-md-6">
                                     <div class="card-body">
                                         <form action="" method="POST">
-                                            <span
-                                                class="fw-bold float-start"
-                                                style="color: #ff9900"
-                                            >
-                                                <svg
-                                                    width="20"
-                                                    heigth="20"
-                                                    fill="none"
-                                                    stroke="currentColor"
-                                                    viewBox="0 0 24 24"
-                                                    xmlns="http://www.w3.org/2000/svg"
-                                                >
-                                                    <path
-                                                        stroke-linecap="round"
-                                                        stroke-linejoin="round"
-                                                        stroke-width="2"
-                                                        d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-                                                    ></path>
-                                                </svg>
+                                            <span class="fw-bold float-start fw-bold" >
+                                                <i data-lucide="circle-dollar-sign"></i>
                                                 Precio: $ 35.00
                                             </span>
-                                            <span
-                                                class="fw-bold float-end"
-                                                style="color: #ff9900"
-                                            >
-                                                <svg
-                                                    width="20"
-                                                    heigth="20"
-                                                    fill="none"
-                                                    stroke="currentColor"
-                                                    viewBox="0 0 24 24"
-                                                    xmlns="http://www.w3.org/2000/svg"
-                                                >
-                                                    <path
-                                                        stroke-linecap="round"
-                                                        stroke-linejoin="round"
-                                                        stroke-width="2"
-                                                        d="M3 6l3 1m0 0l-3 9a5.002 5.002 0 006.001 0M6 7l3 9M6 7l6-2m6 2l3-1m-3 1l-3 9a5.002 5.002 0 006.001 0M18 7l3 9m-3-9l-6-2m0-2v2m0 16V5m0 16H9m3 0h3"
-                                                    ></path>
-                                                </svg>
+                                            <span class="fw-bold float-end fw-bold">
+                                                <i data-lucide="weight"></i>
                                                 Peso: 1.4 /kg
                                             </span>
                                             <br />
@@ -287,117 +153,29 @@
                                             </p>
                                             <div class="">
                                                 <div class="row gx-3 mb-3">
-                                                    <!-- <div class="col-md-6">
-                                                        <h5>Calidad:</h5>
-                                                        <select name="quality" class="form-control" required>
-                                                            <option value="" disabled selected>Seleccione</option>
-                                                            {% for i in single_product.variation_set.qualities %}
-                                                            <option value="{{ i.variation_value | lower }}">{{ i.variation_value | capfirst }}</option>
-                                                            {% endfor %}
-                                                        </select>
-                                                    </div> -->
                                                     <div class="col-md-6">
                                                         <h5>Tamaño:</h5>
-                                                        <select
-                                                            name="size"
-                                                            class="form-control"
-                                                            required
-                                                        >
-                                                            <option
-                                                                value="Selecionar"
-                                                                disabled
-                                                                selected
-                                                            >
+                                                        <select name="size" class="form-control" required>
+                                                            <option value="Selecionar" disabled selected>
                                                                 Seleccione
                                                             </option>
-
-                                                            <option
-                                                                value="Option 02"
-                                                            ></option>
+                                                            <option value="Option 02" ></option>
                                                         </select>
                                                     </div>
                                                 </div>
                                             </div>
                                             <br />
 
-                                            <div
-                                                class="d-flex justify-content-center gap-3"
-                                            >
-                                                <!-- <h5
-                                                    class="text-danger float-start"
-                                                >
-                                                    Fuera de Stock
-                                                </h5> -->
+                                            <div class="d-flex justify-content-center gap-3">
 
-                                                <a
-                                                    href=""
-                                                    class="btn btn-dark mt-auto float-start btn-rounded"
-                                                >
-                                                    <svg
-                                                        width="25"
-                                                        heigth="25"
-                                                        fill="none"
-                                                        stroke="currentColor"
-                                                        viewBox="0 0 24 24"
-                                                        xmlns="http://www.w3.org/2000/svg"
-                                                    >
-                                                        <path
-                                                            stroke-linecap="round"
-                                                            stroke-linejoin="round"
-                                                            stroke-width="2"
-                                                            d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
-                                                        ></path>
-                                                        <path
-                                                            stroke-linecap="round"
-                                                            stroke-linejoin="round"
-                                                            stroke-width="2"
-                                                            d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
-                                                        ></path>
-                                                    </svg>
+                                                <a href="" class="btn btn-dark mt-auto float-start rounded-3">
+                                                    <i data-lucide="eye"></i>
                                                     Ver en Carrito
                                                 </a>
-                                                <!-- <button
-                                                    type="submit"
-                                                    class="btn btn-outline-dark mt-auto btn-rounded"
-                                                >
-                                                    Agregar Otro
-                                                    <svg
-                                                        width="25"
-                                                        heigth="25"
-                                                        fill="none"
-                                                        stroke="currentColor"
-                                                        viewBox="0 0 24 24"
-                                                        xmlns="http://www.w3.org/2000/svg"
-                                                    >
-                                                        <path
-                                                            stroke-linecap="round"
-                                                            stroke-linejoin="round"
-                                                            stroke-width="2"
-                                                            d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"
-                                                        ></path>
-                                                    </svg>
-                                                </button> -->
 
-                                                <button
-                                                    type="submit"
-                                                    class="btn btn-dark mt-auto btn-rounded"
-                                                >
+                                                <button type="submit" class="btn btn-dark mt-auto rounded-3">
                                                     Añadir al carrito
-                                                    <svg
-                                                        width="25"
-                                                        heigth="25"
-                                                        fill="none"
-                                                        stroke="currentColor"
-                                                        viewBox="0 0 24 24"
-                                                        xmlns="http://www.w3.org/2000/svg"
-                                                    >
-                                                        <path
-                                                            stroke-linecap="round"
-                                                            stroke-linejoin="round"
-                                                            stroke-width="2"
-                                                            d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"
-                                                        ></path>
-                                                    </svg>
+                                                    <i data-lucide="shopping-cart"></i>
                                                 </button>
                                             </div>
                                         </form>
@@ -413,7 +191,7 @@
                 <br />
                 <div class="row justify-content-center mt-3">
                     <div class="col-md-9">
-                        <div class="card p-3">
+                        <div class="card p-3 rounded-4">
                             <h5 class="fw-bolder">También te puede Gustar:</h5>
                             <br />
 
@@ -432,61 +210,19 @@
 
                                         <div class="text-center text-secondary">
                                             <!-- Product name-->
-                                            <a
-                                                href=""
-                                                class="fs-5 text-decoration-none text-dark"
-                                            >
-                                                Producto 02 </a
-                                            ><br />
+                                            <a href="" class="fs-5 text-decoration-none text-dark"> Producto 02 </a >
+                                            <br />
                                             <!-- Product price-->
-                                            <span
-                                                class="fw-bold"
-                                                style="color: #ff9900"
-                                            >
+                                            <span class="fw-bold" style="color: #49739C">
                                                 USD$ 34.00
                                             </span>
                                         </div>
                                         <div class="text-center">
-                                            <a
-                                                class="btn mt-auto"
-                                                href=""
-                                                style="
-                                                    background-color: #eee;
-                                                    border-radius: 0.5rem;
-                                                "
-                                            >
-                                                <svg
-                                                    width="25"
-                                                    heigth="25"
-                                                    fill="none"
-                                                    stroke="currentColor"
-                                                    viewBox="0 0 24 24"
-                                                    xmlns="http://www.w3.org/2000/svg"
-                                                >
-                                                    <path
-                                                        stroke-linecap="round"
-                                                        stroke-linejoin="round"
-                                                        stroke-width="2"
-                                                        d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"
-                                                    ></path>
-                                                </svg>
+                                            <a class="btn mt-auto" href="" style=" background-color: #eee; border-radius: 0.5rem;  " >
+                                                <i data-lucide="shopping-cart"></i>
                                             </a>
                                             <a class="btn mt-auto" href="#">
-                                                <svg
-                                                    width="25"
-                                                    heigth="25"
-                                                    fill="none"
-                                                    stroke="currentColor"
-                                                    viewBox="0 0 24 24"
-                                                    xmlns="http://www.w3.org/2000/svg"
-                                                >
-                                                    <path
-                                                        stroke-linecap="round"
-                                                        stroke-linejoin="round"
-                                                        stroke-width="2"
-                                                        d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
-                                                    ></path>
-                                                </svg>
+                                                <i data-lucide="heart"></i>
                                             </a>
                                         </div>
                                     </figure>
@@ -518,13 +254,13 @@
                 </div>
                 <div class="mb-3">
                     <a href="" class="text-decoration-none">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-facebook-icon lucide-facebook"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+                        <i data-lucide="facebook"></i>
                     </a>
                     <a href="" class="text-decoration-none">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-instagram-icon lucide-instagram"><rect width="20" height="20" x="2" y="2" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" x2="17.51" y1="6.5" y2="6.5"/></svg>
+                        <i data-lucide="instagram"></i>
                     </a>
                     <a href="" class="text-decoration-none">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-twitter-icon lucide-twitter"><path d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2z"/></svg>
+                        <i data-lucide="twitter"></i>
                     </a>
                 </div>
                 <p class="text-muted mb-0">&copy;2025 LocalStore. All rights reserved.</p>
@@ -532,9 +268,12 @@
         </footer>
 
         <script
-            src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
-            integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
-            crossorigin="anonymous"
+            src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"
         ></script>
+
+        <script src="https://unpkg.com/lucide@latest"></script>
+        <script>
+          lucide.createIcons();
+        </script>
     </body>
 </html>
