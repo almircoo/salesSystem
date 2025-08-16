@@ -55,11 +55,11 @@ desarrollado con Bootstrap 5.3.7 y JAVA, diseñado para gestionar las ventas de 
 ---
 
 ##  3. Backend Logica
-- [ ] Configurar servidor Mysql + Eclipse.
-- [ ] Conectar a base de datos (MySQL).
-- [ ] Crear Logica para:
-  - [ ] Obtener categorías.
-  - [ ] Obtener productos.
+- [x] Configurar servidor Mysql + Eclipse.
+- [x] Conectar a base de datos (MySQL).
+- [x] Crear Logica para:
+  - [x] Obtener categorías.
+  - [x] Obtener productos.
   - [ ] Crear pedidos.
   - [ ] Autenticación de usuario.
 
@@ -108,11 +108,11 @@ desarrollado con Bootstrap 5.3.7 y JAVA, diseñado para gestionar las ventas de 
 
 ---
 
-## 🛠 5. Optimización y Extras
+## 5. Optimización y Extras
 - [x] Implementar paginación en listas de productos.
 - [x] Agregar filtros y búsqueda avanzada.
-- [ ] Implementar validaciones de formularios.
-- [ ] Optimizar imágenes (lazy loading).
+- [x] Implementar validaciones de formularios.
+- [x] Optimizar imágenes (lazy loading).
 - [ ] Mejorar SEO (metadatos, etiquetas alt).
 - [ ] Configurar notificaciones visuales (toasts).
 
