@@ -133,3 +133,15 @@ tr{
 td, th {
     color: #49739C !important;
 }
+
+/* Navbar encima del sidebar en móviles */
+#mainNavbar {
+  order: -1; /* Lo manda arriba en pantallas pequeñas */
+}
+
+/* Desde md en adelante, el navbar queda dentro del content */
+@media (min-width: 768px) {
+  #mainNavbar {
+    order: 0;
+  }
+}
