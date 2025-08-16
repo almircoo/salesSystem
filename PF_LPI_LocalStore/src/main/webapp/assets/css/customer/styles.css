@@ -1,0 +1,72 @@
+@charset "UTF-8";
+
+@import url("https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;500;600;700;800;900&display=swap");
+
+body {
+    background-color: #eee !important;
+    /* eee */
+    font-family: "Nunito", sans-serif;
+}
+
+.bg-light {
+    background-color: #eee !important;
+}
+
+
+.btn-rounded {
+    border-radius: 24px;
+}
+
+.card-border{
+    border: none;
+}
+.carousel-inner {
+    border-radius: 1.4rem;
+}
+.figure-img {
+    border-radius: 1.2rem;
+    border-color: rgba(242, 245, 246) !important;
+}
+
+.dropdown-toggle.dropdown-ico::after {
+    vertical-align: 0;
+    margin: 0;
+    content: "";
+    border: none;
+}
+
+.thumbnail img {
+    display: inline-block;
+    width: 50px;
+    height: 50px;
+    border: 1px solid #eee;
+    padding: 5px;
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+.thumbnail img:hover {
+    border: 1px solid #00000059;
+}
+
+.list-group-item.active {
+    color: #00000059 !important;
+    background-color: #eee !important;
+    border-color: #eee;
+    border-radius: 1rem;
+}
+
+.list-group-item:hover {
+    color: #00000059;
+}
+
+.form-check-input {
+    width: 1.2em !important;
+    height: 1.2em !important;
+    background-color: #eee !important;
+    color: #00000059;
+}
+.form-check-input:checked {
+    background-color: #000000 !important;
+    border-color: #00000059 !important;
+}
