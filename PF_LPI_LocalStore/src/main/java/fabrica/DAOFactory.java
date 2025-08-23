@@ -2,7 +2,11 @@ package fabrica;
 
 import interfaces.ICategoriaDAO;
 import interfaces.IClienteDAO;
+import interfaces.IDetallePedidoDAO;
+import interfaces.IPedidoDAO;
 import interfaces.IProductoDAO;
+import interfaces.IReporteDAO;
+import interfaces.IUsuarioDAO;
 
 public abstract class DAOFactory {
 
@@ -35,5 +39,9 @@ public abstract class DAOFactory {
 	public abstract ICategoriaDAO getCategoriaDAO();
 	public abstract IProductoDAO getProductoDAO();
 	public abstract IClienteDAO getClienteDAO();
+	public abstract IUsuarioDAO getUsuarioDAO();
 	
+	public abstract IPedidoDAO getPedidoDAO();
+	public abstract IDetallePedidoDAO getDetallePedidoDAO();
+	public abstract IReporteDAO getReporteDAO();
 }

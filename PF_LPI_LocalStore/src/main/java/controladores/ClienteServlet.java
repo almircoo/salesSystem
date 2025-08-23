@@ -5,11 +5,14 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
+
 import java.io.IOException;
 import java.util.ArrayList;
 
 import entidades.Categoria;
 import entidades.Cliente;
+import entidades.Usuario;
 import fabrica.DAOFactory;
 import interfaces.IClienteDAO;
 
@@ -33,16 +36,27 @@ public class ClienteServlet extends HttpServlet {
 	 * @see HttpServlet#service(HttpServletRequest request, HttpServletResponse response)
 	 */
     protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		HttpSession session = request.getSession();
+		Usuario user = new Usuario();
+		if (session.getAttribute("usuario") != null) user = (Usuario)session.getAttribute("usuario");
 		
-		String opcion = "";
-		if (request.getParameter("opcion") != null) opcion = request.getParameter("opcion");
-		switch (opcion) {
-			case "lista" : this.lista(request, response); break;
-			case "editar" : this.editar(request, response); break;
-			case "registrar" : this.registrar(request, response); break;
-			case "eliminar" : this.eliminar(request, response); break;
-			default:
-				this.lista(request, response);
+		if (user.getUsuarioId() == 0) response.sendRedirect("auth");
+		else {
+			String opcion = "";
+			if (request.getParameter("opcion") != null) opcion = request.getParameter("opcion");
+			switch (opcion) {
+				case "lista" : this.lista(request, response); break;
+				case "editar" : this.editar(request, response); break;
+				case "registrar" : this.registrar(request, response); break;
+				case "eliminar" : 
+					if (!"ADMIN".equals(user.getRol())) {
+						response.sendRedirect("categoria");
+					} else {
+						this.eliminar(request, response);
+					}
+				default:
+					this.lista(request, response);
+			}
 		}
 	}
 	
@@ -58,7 +72,7 @@ public class ClienteServlet extends HttpServlet {
 		request.setAttribute("activepage", "cliente");
 		
 		request.setAttribute("lista", lista);				
-		request.getRequestDispatcher("/cliente/cliente_lista.jsp").forward(request, response);
+		request.getRequestDispatcher("/admin/cliente/cliente_lista.jsp").forward(request, response);
 	}
 	
 	protected void editar(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -71,7 +85,7 @@ public class ClienteServlet extends HttpServlet {
 		request.setAttribute("activepage", "cliente");
 		
 		request.setAttribute("registro", obj);
-		request.getRequestDispatcher("/cliente/cliente_editar.jsp").forward(request, response);
+		request.getRequestDispatcher("/admin/cliente/cliente_editar.jsp").forward(request, response);
 	}
 	
 	protected void registrar(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

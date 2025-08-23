@@ -5,10 +5,13 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import entidades.Categoria;
 import entidades.Producto;
+import entidades.Usuario;
 import fabrica.DAOFactory;
 import interfaces.ICategoriaDAO;
 import interfaces.IProductoDAO;
@@ -35,17 +38,53 @@ public class ProductoServlet extends HttpServlet {
 	/**
 	 * @see HttpServlet#service(HttpServletRequest request, HttpServletResponse response)
 	 */
-protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		HttpSession session = request.getSession();
+		Usuario user = new Usuario();
+		if (session.getAttribute("usuario") != null) user = (Usuario)session.getAttribute("usuario");
 		
-		String opcion = "";
-		if (request.getParameter("opcion") != null) opcion = request.getParameter("opcion");
-		switch (opcion) {
-			case "lista" : this.lista(request, response); break;
-			case "editar" : this.editar(request, response); break;
-			case "registrar" : this.registrar(request, response); break;
-			case "eliminar" : this.eliminar(request, response); break;
-			default:
-				this.lista(request, response);
+		if (user.getUsuarioId() == 0) response.sendRedirect("auth");
+		else {
+			String opcion = "";
+			if (request.getParameter("opcion") != null) opcion = request.getParameter("opcion");
+			// VENDEDOR: solo lectura (lista)
+			// MANAGER: lectura y edición (lista, editar, registrar)
+			// ADMIN: acceso completo (CRUD)
+			
+			if ("VENDEDOR".equals(user.getRol())) {
+				// Solo puede ver la lista de productos
+				if (!"lista".equals(opcion) && !"".equals(opcion)) {
+					response.sendRedirect("producto");
+					return;
+				}
+			}
+			
+			switch (opcion) {
+				case "lista" : this.lista(request, response); break;
+				case "editar" : 
+					if ("VENDEDOR".equals(user.getRol())) {
+						response.sendRedirect("producto");
+					} else {
+						this.editar(request, response);
+					}
+					break;
+				case "registrar" : 
+					if ("VENDEDOR".equals(user.getRol())) {
+						response.sendRedirect("producto");
+					} else {
+						this.registrar(request, response);
+					}
+					break;
+				case "eliminar" : 
+					if (!"ADMIN".equals(user.getRol())) {
+						response.sendRedirect("producto");
+					} else {
+						this.eliminar(request, response);
+					}
+					break;
+				default:
+					this.lista(request, response);
+			}
 		}
 	}
 	
@@ -62,7 +101,7 @@ protected void service(HttpServletRequest request, HttpServletResponse response)
 		request.setAttribute("activepage", "producto");
 		
 		request.setAttribute("lista", lista);				
-		request.getRequestDispatcher("/producto/producto_lista.jsp").forward(request, response);
+		request.getRequestDispatcher("/admin/producto/producto_lista.jsp").forward(request, response);
 	}
 	protected void editar(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		Producto obj = new Producto();
@@ -76,7 +115,7 @@ protected void service(HttpServletRequest request, HttpServletResponse response)
 		
 		request.setAttribute("registro", obj);
 		request.setAttribute("listaCategorias", listas);
-		request.getRequestDispatcher("producto/producto_editar.jsp").forward(request, response);
+		request.getRequestDispatcher("/admin/producto/producto_editar.jsp").forward(request, response);
 	}
 	protected void registrar(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		int id = Integer.parseInt(request.getParameter("productoId"));

@@ -3,6 +3,7 @@
 <%@page import="entidades.Producto"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -14,30 +15,27 @@
 	xintegrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
 	crossorigin="anonymous">
 <!-- Bootstrap Icons -->
-<link rel="stylesheet"
-	href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 <link rel="stylesheet" href="./assets/css/admin/styles.css">
 <link rel="stylesheet" href="https://unpkg.com/lucide@latest/dist/lucide.min.css">
 </head>
 <body>
 
-	<!-- sidebar -->
 	<div class="container">
 		<div class="row justify-content-center mt-3">
 			<!-- sidebar -->
 			<div class="col-md-3">
-				<%@include file="/shared/sidebar.jsp"%>
+				<%@include file="/../shared/admin/sidebar.jsp"%>
 			</div>
 			<!-- content -->
 			<div class="col-md-9">
-				<%@include file="/shared/navbar.jsp" %>
+				<%@include file="/../shared/admin/navbar.jsp" %>
 				<div class="mt-5 d-flex">
 					<div class="p-2 w-100">
 						<b>Producto</b>
 					</div>
 					<%
-					Producto producto = (Producto) request.getAttribute("registro");
-					ArrayList<Categoria> categorias = (ArrayList<Categoria>) request.getAttribute("listaCategorias");
+					/* Producto producto = (Producto) request.getAttribute("registro");
+					ArrayList<C ategoria> categorias = (ArrayList<Categoria>) request.getAttribute("listaCategorias");*/
 					%>
 				</div>
 				<br>
@@ -47,44 +45,38 @@
 
 						<div class="row justify-content-center">
 							<div class="col-md-12">
-								<form id="formProducto" action="producto?opcion=registrar"
-									method="post">
-									<input type="hidden" name="productoId"
-										value="<%=producto.getProductoId()%>" />
+								<form id="formProducto" action="producto?opcion=registrar" method="post">
+									<input type="hidden" name="productoId" value="${registro.productoId}"  />
 
 									<!-- Nombre -->
 									<div class="mb-2">
 										<label for="productName" class="form-label font-medium">Nombre
 											Producto</label> <input type="text" class="form-control rounded-lg"
-											name="nombre" value="<%=producto.getNombre()%>"
+											name="nombre" value="${registro.nombre}"
 											placeholder="Ingrese Nombre Producto" required>
 									</div>
 									<div class="mb-2">
 										<label for="stockQuantity" class="form-label font-medium">Cantidad
 											Stock</label> <input type="number" class="form-control rounded-lg"
-											name="stock" value="<%=producto.getStock()%>"
+											name="stock" value="${registro.stock}"
 											placeholder="Ingrese cantidad stock" required>
 									</div>
 									<div class="mb-2">
 										<label for="price" class="form-label  font-medium">Precio</label>
 										<input type="number" step="0.01"
 											class="form-control rounded-lg" name="precio"
-											value="<%=producto.getPrecio()%>"
+											value="${registro.precio}"
 											placeholder="Ingresar precio" required>
 									</div>
 									<div class="mb-2">
 										<label for="category" class="form-label font-medium">Categoria</label>
 										<select class="form-select rounded-lg" name="categoria" required>
-											<%
-											for (Categoria c : categorias) {
-											%>
-											<option value="<%=c.getCategoriaId()%>"
-												<%=(c.getCategoriaId() == producto.getCategoriaId() ? "selected=\"selected\"" : "")%>>
-												<%=c.getNombre()%>
-											</option>
-											<%
-											}
-											%>
+											<c:forEach var="c" items="${listaCategorias}">
+												<option value="${c.categoriaId}" 
+													<c:if test="${c.categoriaId == registro.categoriaId}">selected</c:if>>
+													${c.nombre}
+												</option>
+											</c:forEach>
 										</select>
 									</div>
 
@@ -93,18 +85,18 @@
 										<p class="form-label font-medium">Estado</p>
 										<div class="flex gap-6">
 											<div class="form-check">
-												<input class="form-check-input" type="radio" name="estado"
-													id="statusActive" value="true"
-													<%=producto.isEstado() ? "checked" : ""%>> <label
-													class="form-check-label" for="statusActive"> Activo
+												<input class="form-check-input" type="radio" name="estado" id="statusActive" value="true"
+													<c:if test="${registro.estado}">checked</c:if>> 
+												<label class="form-check-label" for="statusActive"> 
+													Activo
 												</label>
 											</div>
 											<div class="form-check">
-												<input class="form-check-input" type="radio" name="estado"
-													id="statusInactive" value="false"
-													<%=!producto.isEstado() ? "checked" : ""%>> <label
-													class="form-check-label" for="statusInactive">
-													Desactivado </label>
+												<input class="form-check-input" type="radio" name="estado" id="statusInactive" value="false"
+													<c:if test="${!registro.estado}">checked</c:if>> 
+												<label class="form-check-label" for="statusInactive">
+													Desactivado 
+												</label>
 											</div>
 										</div>
 									</div>

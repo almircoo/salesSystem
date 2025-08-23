@@ -2,6 +2,7 @@
 <%@page import="java.util.ArrayList"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -13,8 +14,6 @@
 	xintegrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
 	crossorigin="anonymous">
 <!-- Bootstrap Icons -->
-<link rel="stylesheet"
-	href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 <link rel="stylesheet" href="./assets/css/admin/styles.css">
 	<link rel="stylesheet" href="https://unpkg.com/lucide@latest/dist/lucide.min.css">
 </head>
@@ -24,21 +23,24 @@
 		<div class="row justify-content-center mt-3">
 			<!-- sidebar -->
 			<div class="col-md-3">
-				<%@include file="/shared/sidebar.jsp" %>
+				<%@include file="/../shared/admin/sidebar.jsp" %>
 			</div>
 			<!-- content -->
 			<div class="col-md-9">
-				<%@include file="/shared/navbar.jsp" %>
+				<%@include file="/../shared/admin/navbar.jsp" %>
 				
 				<div class="mt-5 d-flex justify-content-between align-items-center flex-wrap gap-2">
                      <div>
                          <h3 class="fw-bold">Categorias</h3>
                      </div>
                      <%
-						ArrayList<Categoria> lista = (ArrayList<Categoria>)request.getAttribute("lista");
+						/* ArrayList<Categoria> lista = (ArrayList<Categoria>)request.getAttribute("lista"); */
 					%>
                      <div class="flex-shrink-0">
-                         <a href="categoria?opcion=editar" class="btn btn-secondary text-nowrap"><i class="bi bi-person-plus"></i> Crear Categoria</a>
+                     	<c:if test="${usuario.rol == 'ADMIN'}">
+                     		<a href="categoria?opcion=editar" class="btn btn-secondary text-nowrap"><i data-lucide="plus"></i> Crear Categoria</a>
+                     	</c:if>
+                    
                      </div>
                  </div>
 				<br>
@@ -59,25 +61,34 @@
 											</tr>
 										</thead>
 										<tbody>
-										<% for(Categoria c: lista) { %>
-											<tr>
-												<th scope="row"><%= c.getCategoriaId() %></th>
-												<td><%= c.getNombre() %></td>
-												<td>
-												    <% if(c.getEstado()) { %>
-												        <span class="badge order-status-delivered">Activado</span>
-												    <% } else { %>
-												        <span class="badge danger-status">Desactivado</span>
-												    <% } %>
-												</td>
-												<td>
-													<div class="d-flex justify-content-start">
-														<a class="btn btn-sm btn-dark" href="categoria?opcion=editar&id=<%=c.getCategoriaId()%>"><i class="bi bi-pencil-fill"></i> Editar</a>
-														<a class="btn btn-sm btn-danger" href="javascript:eliminar(<%=c.getCategoriaId()%>)"><i class="bi bi-x-circle"></i> Eliminar</a>
-													</div>
-												</td>
-											</tr>
-										<% } %>
+											<c:forEach var="c" items="${ lista }">
+												<tr>
+													<th scope="row">${c.categoriaId}</th>
+													<td>${ c.nombre }</td>
+													<td>
+														<c:choose>
+															<c:when test="c.estado">
+																<span class="badge order-status-delivered">Activado</span>
+															</c:when>
+															<c:otherwise>
+																<span class="badge danger-status">Desactivado</span>
+															</c:otherwise>
+														</c:choose>
+													</td>
+													<td>
+														<div class="d-flex justify-content-start">
+															<c:if test="${usuario.rol == 'ADMIN' or usuario.rol == 'MANAGER'}" >
+																<a class="btn btn-sm btn-dark" href="categoria?opcion=editar&id=${c.categoriaId}"><i data-lucide="square-pen"></i>Editar</a>
+															</c:if>
+															<c:if test="${usuario.rol == 'ADMIN'}">
+																<a class="btn btn-sm btn-danger" href="javascript:eliminar(${c.categoriaId})">
+																	<i data-lucide="trash-2"></i> Eliminar</a>
+															</c:if>
+														
+														</div>
+													</td>
+												</tr>
+											</c:forEach>
 										</tbody>
 									</table>
 								</div>
