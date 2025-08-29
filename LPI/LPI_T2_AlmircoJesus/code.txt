@@ -1,0 +1,941 @@
+
+	<div class="container" >
+		
+		<div class="row justify-content-center mt-3">
+			<!-- sidebar -->
+			<div class="col-md-3">
+				<%@include file="/../shared/admin/sidebar.jsp"%>
+			</div>
+			
+			<!-- content -->
+			<div class="col-md-9">
+				<!-- aqui detalles del pedido -->
+				<%@include file="/../shared/admin/navbar.jsp" %>
+				
+				<%
+					Pedido pedido = (Pedido)request.getAttribute("pedido");
+					ArrayList<DetallePedido> detalles = (ArrayList<DetallePedido>)request.getAttribute("detalles");
+					DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
+				%>
+				
+				<!-- Agregando header con navegación -->
+				<div class="mt-5 d-flex justify-content-between align-items-center">
+                     <div>
+                         <h3 class="fw-bold">Detalles del Pedido #<%= pedido.getPedidoId() %></h3>
+                     </div>
+                     <div>
+                         <a href="pedidos" class="btn btn-secondary">
+                         	<i data-lucide="arrow-left"></i> Volver a Pedidos
+                         </a>
+                     </div>
+                 </div>
+                 <!-- Agregando información del pedido -->
+				<div class="row mt-4">
+					<div class="col-md-6">
+						<div class="card rounded-4">
+							<div class="card-header">
+								<h5 class="mb-0">Información del Pedido</h5>
+							</div>
+							<div class="card-body">
+								<div class="row mb-2">
+									<div class="col-sm-4"><strong>ID Pedido:</strong></div>
+									<div class="col-sm-8">#<%= pedido.getPedidoId() %></div>
+								</div>
+								<div class="row mb-2">
+									<div class="col-sm-4"><strong>Cliente:</strong></div>
+									<div class="col-sm-8"><%= pedido.getCliente() %></div>
+								</div>
+								<div class="row mb-2">
+									<div class="col-sm-4"><strong>Fecha:</strong></div>
+									<div class="col-sm-8"><%= pedido.getFechaPedido().format(formatter) %></div>
+								</div>
+								<div class="row mb-2">
+									<div class="col-sm-4"><strong>Estado:</strong></div>
+									<div class="col-sm-8">
+										<% 
+											String estadoClass = "";
+											switch(pedido.getEstado()) {
+												case "PENDIENTE": estadoClass = "badge bg-warning"; break;
+												case "PROCESANDO": estadoClass = "badge bg-info"; break;
+												case "EN_CAMINO": estadoClass = "badge bg-primary"; break;
+												case "ENTREGADO": estadoClass = "badge order-status-delivered"; break;
+												case "CANCELADO": estadoClass = "badge bg-danger"; break;
+												default: estadoClass = "badge bg-secondary";
+											}
+										%>
+										<span class="<%= estadoClass %>"><%= pedido.getEstado() %></span>
+									</div>
+								</div>
+								<div class="row mb-2">
+									<div class="col-sm-4"><strong>Total:</strong></div>
+									<div class="col-sm-8"><strong>S/. <%= String.format("%.2f", pedido.getTotal()) %></strong></div>
+								</div>
+								<% if (pedido.getObservaciones() != null && !pedido.getObservaciones().trim().isEmpty()) { %>
+								<div class="row mb-2">
+									<div class="col-sm-4"><strong>Observaciones:</strong></div>
+									<div class="col-sm-8"><%= pedido.getObservaciones() %></div>
+								</div>
+								<% } %>
+							</div>
+						</div>
+					</div>
+				</div>
+                 <!-- Agregando tabla de detalles del pedido -->
+				<div class="card rounded-4 mt-4">
+					<div class="card-header">
+						<h5 class="mb-0">Productos del Pedido</h5>
+					</div>
+					<div class="card-body">
+						<div class="table-responsive">
+							<table class="table table-hover">
+								<thead>
+									<tr>
+										<th scope="col">Producto</th>
+										<th scope="col">Cantidad</th>
+										<th scope="col">Precio Unitario</th>
+										<th scope="col">Subtotal</th>
+									</tr>
+								</thead>
+								<tbody>
+								<% 
+									double totalCalculado = 0;
+									for(DetallePedido d: detalles) { 
+										totalCalculado += d.getSubtotal();
+								%>
+									<tr>
+										<td><%= d.getProducto() %></td>
+										<td><%= d.getCantidad() %></td>
+										<td>S/. <%= String.format("%.2f", d.getPrecioUnitario()) %></td>
+										<td>S/. <%= String.format("%.2f", d.getSubtotal()) %></td>
+									</tr>
+								<% } %>
+								</tbody>
+								<tfoot>
+									<tr class="table-active">
+										<th colspan="3" class="text-end">Total:</th>
+										<th>S/. <%= String.format("%.2f", totalCalculado) %></th>
+									</tr>
+								</tfoot>
+							</table>
+						</div>
+					</div>
+				</div>
+                 <!-- endcol-md-9 -->
+			</div>
+			
+		</div>
+	</div>
+	
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js" integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q" crossorigin="anonymous"></script>
+	
+	<script src="https://unpkg.com/lucide@latest"></script>
+     <script>
+       lucide.createIcons();
+     </script>
+     
+     
+     
+
+<div class="container" >
+		
+		<div class="row justify-content-center mt-3">
+			<!-- sidebar -->
+			<div class="col-md-3">
+				<%@include file="/../shared/admin/sidebar.jsp"%>
+			</div>
+			
+			<!-- content -->
+			<div class="col-md-9">
+				<!-- Listar pedido aqui -->
+				<%@include file="/../shared/admin/navbar.jsp" %>
+				<%
+					/* ArrayList<Pedido> lista = (ArrayList<Pedido>)request.getAttribute("lista");
+					HttpSession miSession = request.getSession(); 
+					Usuario userRole = new Usuario();
+					if (miSession .getAttribute("usuario") != null) userRole = (Usuario) miSession.getAttribute("usuario");
+					String miRol = userRole.getRol(); */
+				%>
+				
+				<!--  header con título y filtros -->
+				<div class="mt-5 d-flex justify-content-between align-items-center flex-wrap gap-2">
+                     <div>
+                         <h3 class="fw-bold">Gestión de Pedidos</h3>
+                     </div>
+                     <div class="flex-shrink-0">
+	                     
+	                     	<a href="pedidos?opcion=editar" class="btn btn-secondary text-nowrap">
+	                         	<i data-lucide="plus"></i> Nuevo Pedido
+	                         </a>
+	                     
+                     </div>
+                 </div>
+                 
+                 <!-- aqui filtros de búsqueda -->
+				<div class="card rounded-4 mt-3">
+					<div class="card-body">
+						<form method="GET" action="pedidos" class="row g-3">
+							<div class="col-md-4">
+								<label class="form-label">Buscar</label>
+								<input type="text" class="form-control" name="texto" placeholder="Cliente, ID pedido..." value="${param.texto != null ? param.texto : ''}">
+							</div>
+							<div class="col-md-3">
+								<label class="form-label">Estado</label>
+								<select class="form-select" name="estado">
+									<option value="">Todos los estados</option>
+									<option value="PENDIENTE" ${param.estado == 'PENDIENTE' ? 'selected' : ''}>Pendiente</option>
+									<option value="PROCESANDO" ${param.estado == 'PROCESANDO' ? 'selected' : ''}>Procesando</option>
+									<option value="EN_CAMINO" ${param.estado == 'EN_CAMINO' ? 'selected' : ''}>En Camino</option>
+									<option value="ENTREGADO" ${param.estado == 'ENTREGADO' ? 'selected' : ''}>Entregado</option>
+									<option value="CANCELADO" ${param.estado == 'CANCELADO' ? 'selected' : ''}>Cancelado</option>
+								</select>
+							</div>
+							<div class="col-md-2">
+								<label class="form-label">&nbsp;</label>
+								<button type="submit" class="btn btn-primary d-block">
+									<i data-lucide="search"></i> Buscar
+								</button>
+							</div>
+						</form>
+					</div>
+				</div>
+				
+				<!-- aqui tabla de pedidos con funcionalidad completa -->
+				<div class="card rounded-4 mt-3">
+					<div class="card-body">
+						<div class="table-responsive">
+							<table class="table table-hover">
+								<thead>
+									<tr>
+										<th scope="col">ID</th>
+										<th scope="col">Cliente</th>
+										<th scope="col">Fecha</th>
+										<th scope="col">Estado</th>
+										<th scope="col">Total</th>
+										<th scope="col">Acciones</th>
+									</tr>
+								</thead>
+								<tbody>
+									<c:forEach items="${lista}" var="p">
+										<tr>
+											<th scope="row"># ${p.pedidoId}</th>
+											<td>${p.cliente}</td>
+											<td><fmt:formatDate value="${p.fechaPedido}" pattern="dd/MM/yyyy HH:mm"/></td>
+											<td>
+												<c:choose>
+													<c:when test="${p.estado == 'PENDIENTE'}"><span class="badge bg-warning">${p.estado}</span></c:when>
+													<c:when test="${p.estado == 'PROCESANDO'}"><span class="badge bg-info">${p.estado}</span></c:when>
+													<c:when test="${p.estado == 'EN_CAMINO'}"><span class="badge bg-primary">${p.estado}</span></c:when>
+													<c:when test="${p.estado == 'ENTREGADO'}"><span class="badge order-status-delivered">${p.estado}</span></c:when>
+													<c:when test="${p.estado == 'CANCELADO'}"><span class="badge bg-danger">${p.estado}</span></c:when>
+													<c:otherwise><span class="badge bg-secondary">${p.estado}</span></c:otherwise>
+												</c:choose>
+											</td>
+											<td>S/. <fmt:formatNumber value="${p.total}" type="number" minFractionDigits="2"/></td>
+											<td>
+												<div class="d-flex gap-1">
+													<a class="btn btn-sm btn-outline-primary" href="pedidos?opcion=detalles&id=${p.pedidoId }">
+														<i data-lucide="eye"></i> Ver
+													</a>
+													<%-- <% if ("ADMIN".equals(rol) || "MANAGER".equals(rol)) { %>
+													<a class="btn btn-sm btn-dark" href="pedidos?opcion=editar&id=<%=p.getPedidoId()%>">
+														<i data-lucide="edit"></i> Editar
+													</a>
+													<% } %> --%>
+													<c:if test="${(usuario.rol == 'ADMIN' or usuario.rol == 'MANAGER') and (p.estado != 'ENTREGADO' and p.estado != 'CANCELADO')}">
+														<div class="dropdown">
+															<button class="btn btn-sm btn-success dropdown-toggle" type="button" data-bs-toggle="dropdown">
+																<i data-lucide="refresh-cw"></i> Estado
+															</button>
+															<ul class="dropdown-menu">
+																<li><a class="dropdown-item" href="javascript:cambiarEstado(${p.pedidoId}, 'PENDIENTE')">Pendiente</a></li>
+																<li><a class="dropdown-item" href="javascript:cambiarEstado(${p.pedidoId}, 'PROCESANDO')">Procesando</a></li>
+																<li><a class="dropdown-item" href="javascript:cambiarEstado(${p.pedidoId}, 'EN_CAMINO')">En Camino</a></li>
+																<li><a class="dropdown-item" href="javascript:cambiarEstado(${p.pedidoId}, 'ENTREGADO')">Entregado</a></li>
+																<li><hr class="dropdown-divider"></li>
+																<li><a class="dropdown-item text-danger" href="javascript:cambiarEstado(${p.pedidoId}, 'CANCELADO')">Cancelar</a></li>
+															</ul>
+														</div>
+													</c:if>
+													<c:if test="${ usuario.rol == 'ADMIN' }">
+														<a class="btn btn-sm btn-danger" href="javascript:eliminar(${p.pedidoId })">
+															<i data-lucide="trash-2"></i> Eliminar
+														</a>
+													</c:if>
+												</div>
+											</td>
+										</tr>
+									</c:forEach>
+								</tbody>
+							</table>
+						</div>
+						
+						<!-- Aqui formularios ocultos para acciones -->
+						<form id="formEliminar" action="pedidos?opcion=eliminar" method="post">
+							<input type="hidden" name="id" />
+						</form>
+						
+						<form id="formCambiarEstado" action="pedidos?opcion=cambiar_estado" method="post">
+							<input type="hidden" name="id" />
+							<input type="hidden" name="nuevoEstado" />
+						</form> 
+					</div>
+				</div>
+				
+			</div>
+			
+		</div>
+	</div>
+	
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js" integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q" crossorigin="anonymous"></script>
+	
+	<!-- scripts para funcionalidad -->
+	<script type="text/javascript">
+		const eliminar = (id) => {
+			const respuesta = confirm('¿Desea eliminar este pedido? Esta acción no se puede deshacer.');
+			if (respuesta) {
+				document.querySelector('#formEliminar input[name=id]').value = id;
+				document.getElementById('formEliminar').submit();
+			}
+		};
+		
+		const cambiarEstado = (id, nuevoEstado) => {
+			const respuesta = confirm('¿Desea cambiar el estado de este pedido?');
+			if (respuesta) {
+				document.querySelector('#formCambiarEstado input[name=id]').value = id;
+				document.querySelector('#formCambiarEstado input[name=nuevoEstado]').value = nuevoEstado;
+				document.getElementById('formCambiarEstado').submit();
+			}
+		};
+	</script>
+	
+	<script src="https://unpkg.com/lucide@latest"></script>
+	<script>
+		lucide.createIcons();
+	</script>
+	
+	
+	
+	
+	
+						<form action="pedidos?opcion=registrar" method="post" id="formPedido">
+							<input type="hidden" name="pedidoId" value="${pedido.pedidoId}">
+							<input type="hidden" name="usuarioId" value="${usuarioSession.usuario.usuarioId}">
+
+							<!-- Información del cliente -->
+							<div class="card mb-4">
+								<div class="card-header bg-primary text-white">
+									<h5 class="mb-0"><i data-lucide="user" class="me-2"></i>Datos del Cliente</h5>
+								</div>
+								<div class="card-body">
+									<div class="row">
+										<div class="col-md-6">
+											<form action="pedidos?opcion=registrar" method="post" id="pedidoForm">
+										        <input type="hidden" name="pedidoId" value="${registro.pedidoId}">
+										        <input type="hidden" name="usuarioId" value="${sessionScope.usuario.usuarioId}">
+										
+										        <!-- Cliente -->
+										        <div class="mb-3">
+										            <label class="form-label">Cliente</label>
+										            <select name="clienteId" class="form-select" required>
+										                <c:forEach var="c" items="${clientes}">
+										                    <option value="${c.clienteId}" ${registro.clienteId == c.clienteId ? "selected" : ""}>${c.nombre}</option>
+										                </c:forEach>
+										            </select>
+										        </div>
+										
+										        <!-- Fecha -->
+										        <div class="mb-3">
+										            <label class="form-label">Fecha Pedido</label>
+										            <input type="datetime-local" name="fechaPedido" class="form-control"
+										                   value="<fmt:formatDate value='${registro.fechaPedido}' pattern='yyyy-MM-dd\'T\'HH:mm'/>">
+										        </div>
+										
+										        <!-- Estado -->
+										        <div class="mb-3">
+										            <label class="form-label">Estado</label>
+										            <select name="estado" class="form-select">
+										                <option ${registro.estado == 'PENDIENTE' ? "selected" : ""}>PENDIENTE</option>
+										                <option ${registro.estado == 'PROCESADO' ? "selected" : ""}>PROCESADO</option>
+										                <option ${registro.estado == 'ENTREGADO' ? "selected" : ""}>ENTREGADO</option>
+										                <option ${registro.estado == 'ANULADO' ? "selected" : ""}>ANULADO</option>
+										            </select>
+										        </div>
+										
+										        <!-- Método de pago -->
+										        <div class="mb-3">
+										            <label class="form-label">Método de Pago</label>
+										            <select name="metodoPago" class="form-select">
+										                <option ${registro.metodoPago == 'EFECTIVO' ? "selected" : ""}>EFECTIVO</option>
+										                <option ${registro.metodoPago == 'TARJETA' ? "selected" : ""}>TARJETA</option>
+										                <option ${registro.metodoPago == 'TRANSFERENCIA' ? "selected" : ""}>TRANSFERENCIA</option>
+										            </select>
+										        </div>
+										
+										        <!-- Tipo comprobante -->
+										        <div class="mb-3">
+										            <label class="form-label">Tipo de Comprobante</label>
+										            <select name="tipoComprobante" class="form-select">
+										                <option ${registro.tipoComprobante == 'BOLETA' ? "selected" : ""}>BOLETA</option>
+										                <option ${registro.tipoComprobante == 'FACTURA' ? "selected" : ""}>FACTURA</option>
+										            </select>
+										        </div>
+										
+										        <!-- Número comprobante -->
+										        <div class="mb-3">
+										            <label class="form-label">Número de Comprobante</label>
+										            <input type="text" name="numeroComprobante" class="form-control" value="${registro.numeroComprobante}">
+										        </div>
+										
+										        <!-- Observaciones -->
+										        <div class="mb-3">
+										            <label class="form-label">Observaciones</label>
+										            <textarea name="observaciones" class="form-control">${registro.observaciones}</textarea>
+										        </div>
+										
+										        <!-- Agregar Detalles -->
+										        <h4>Detalles del Pedido</h4>
+										        <div class="row g-2 mb-3">
+										            <div class="col-md-4">
+										                <select id="productoSelect" class="form-select">
+										                    <c:forEach var="p" items="${productos}">
+										                        <option value="${p.productoId}" data-precio="${p.precio}">${p.nombre} - $${p.precio}</option>
+										                    </c:forEach>
+										                </select>
+										            </div>
+										            <div class="col-md-2">
+										                <input type="number" id="cantidadInput" class="form-control" min="1" value="1">
+										            </div>
+										            <div class="col-md-2">
+										                <button type="button" id="agregarBtn" class="btn btn-primary w-100">Agregar</button>
+										            </div>
+										        </div>
+										
+										        <table class="table table-bordered" id="detallesTabla">
+										            <thead class="table-secondary">
+										            <tr><th>Producto</th><th>Cantidad</th><th>Precio</th><th>Subtotal</th><th></th></tr>
+										            </thead>
+										            <tbody>
+										            <c:forEach var="d" items="${detalles}">
+										                <tr>
+										                    <td>${d.producto.nombre}
+										                        <input type="hidden" name="detallesProductoId[]" value="${d.productoId}">
+										                    </td>
+										                    <td><input type="number" class="form-control" name="detallesCantidad[]" value="${d.cantidad}"></td>
+										                    <td><input type="text" class="form-control" name="detallesPrecioUnitario[]" value="${d.precioUnitario}"></td>
+										                    <td><input type="text" class="form-control" name="detallesSubtotal[]" value="${d.subtotal}" readonly></td>
+										                    <td><button type="button" class="btn btn-sm btn-danger eliminarFila">X</button></td>
+										                </tr>
+										            </c:forEach>
+										            </tbody>
+										        </table>
+										
+										        <!-- Totales -->
+										        <div class="row mt-3">
+										            <div class="col-md-4 offset-md-8">
+										                <div class="mb-2">
+										                    <label>Subtotal</label>
+										                    <input type="text" name="subtotal" id="subtotal" class="form-control" value="${registro.subtotal}" readonly>
+										                </div>
+										                <div class="mb-2">
+										                    <label>IGV</label>
+										                    <input type="text" name="igv" id="igv" class="form-control" value="${registro.igv}" readonly>
+										                </div>
+										                <div class="mb-2">
+										                    <label>Total</label>
+										                    <input type="text" name="total" id="total" class="form-control" value="${registro.total}" readonly>
+										                </div>
+										            </div>
+										        </div>
+										
+										        <button class="btn btn-success mt-3">Guardar Pedido</button>
+										        <a href="pedidos" class="btn btn-secondary mt-3">Cancelar</a>
+										    </form>
+											<%-- <div class="mb-3">
+												<label for="clienteId" class="form-label">Cliente <span
+													class="text-danger">*</span></label> <select class="form-select"
+													id="clienteId" name="clienteId" required>
+													<option value="">Seleccionar cliente...</option>
+													<c:forEach items="${clientes}" var="c">
+														<option value="${c.clienteId}" ${registro.clienteId == c.clienteId ? "selected" : ""}>
+															${c.nombre} - ${c.dni}
+														</option>
+													</c:forEach> --%>
+													<%-- <c:forEach var="cliente" items="${clientes}">
+														<option value="${cliente.clienteId}"
+															data-dni="${cliente.dni}"
+															data-email="${cliente.email}"
+															data-telefono="${cliente.telefono}"
+															${pedido.clienteId == cliente.clienteId ? 'selected' : ''}>
+															${cliente.nombre} - ${cliente.dni}</option>
+													</c:forEach> --%>
+												</select>
+											</div>
+										</div>
+										<!-- Added client info display -->
+										<!-- <div class="col-md-6">
+											<div class="mb-3">
+												<label class="form-label">Información del Cliente</label>
+												<div class="border rounded p-2 bg-light" id="clienteInfo">
+													<small class="text-muted">Seleccione un cliente para ver su información</small>
+												</div>
+											</div>
+										</div> -->
+									</div>
+								</div>
+							</div>
+
+							<!-- Información del pedido -->
+							<%-- <div class="card mb-4">
+								<div class="card-header bg-primary text-white">
+									<h5 class="mb-0"><i data-lucide="file-text" class="me-2"></i>Datos del Pedido</h5>
+								</div>
+								<div class="card-body">
+									<div class="row">
+										<div class="col-md-4">
+											<div class="mb-3">
+												<label for="fechaPedido" class="form-label">Fecha y
+													Hora <span class="text-danger">*</span>
+												</label> 
+												<input type="datetime-local" class="form-control" id="fechaPedido"
+													name="fechaPedido" 
+													value="<fmt:formatDate value='${not empty pedido.fechaPedido ? pedido.fechaPedido : now}' pattern='yyyy-MM-dd\'T\'HH:mm'/>"
+													${esNuevo ? 'readonly' : ''} required>
+											</div>
+										</div>
+										<div class="col-md-4">
+											<div class="mb-3">
+												<label for="tipoComprobante" class="form-label">Tipo
+													de Comprobante <span class="text-danger">*</span>
+												</label> <select class="form-select" id="tipoComprobante"
+													name="tipoComprobante" required>
+													<option value="BOLETA"
+														${pedido.tipoComprobante == 'BOLETA' ? 'selected' : ''}>Boleta</option>
+													<option value="FACTURA"
+														${pedido.tipoComprobante == 'FACTURA' ? 'selected' : ''}>Factura</option>
+												</select>
+											</div>
+										</div>
+										<div class="col-md-4">
+											<div class="mb-3">
+												<label for="numeroComprobante" class="form-label">Número de Comprobante</label>
+												<input type="text" class="form-control" id="numeroComprobante"
+													name="numeroComprobante" value="${pedido.numeroComprobante}"
+													placeholder="Se generará automáticamente" ${esNuevo ? 'readonly' : ''}>
+											</div>
+										</div>
+									</div>
+									<div class="row">
+										<div class="col-md-4">
+											<div class="mb-3">
+												<label for="metodoPago" class="form-label">Método de
+													Pago <span class="text-danger">*</span>
+												</label> <select class="form-select" id="metodoPago"
+													name="metodoPago" required>
+													<option value="EFECTIVO"
+														${pedido.metodoPago == 'EFECTIVO' ? 'selected' : ''}>Efectivo</option>
+													<option value="TARJETA"
+														${pedido.metodoPago == 'TARJETA' ? 'selected' : ''}>Tarjeta</option>
+													<option value="TRANSFERENCIA"
+														${pedido.metodoPago == 'TRANSFERENCIA' ? 'selected' : ''}>Transferencia</option>
+												</select>
+											</div>
+										</div>
+										<div class="col-md-4">
+											<div class="mb-3">
+												<label for="estado" class="form-label">Estado <span
+													class="text-danger">*</span></label> 
+												<select class="form-select" id="estado" name="estado" required ${esNuevo ? 'disabled' : ''}>
+													<option value="PENDIENTE"
+														${pedido.estado == 'PENDIENTE' or esNuevo ? 'selected' : ''}>Pendiente</option>
+													<option value="PROCESANDO"
+														${pedido.estado == 'PROCESANDO' ? 'selected' : ''}>Procesando</option>
+													<option value="EN_CAMINO"
+														${pedido.estado == 'EN_CAMINO' ? 'selected' : ''}>En
+														Camino</option>
+													<option value="ENTREGADO"
+														${pedido.estado == 'ENTREGADO' ? 'selected' : ''}>Entregado</option>
+													<option value="CANCELADO"
+														${pedido.estado == 'CANCELADO' ? 'selected' : ''}>Cancelado</option>
+												</select>
+												<c:if test="${esNuevo}">
+													<input type="hidden" name="estado" value="PENDIENTE">
+												</c:if>
+											</div>
+										</div>
+										<div class="col-md-4">
+											<div class="mb-3">
+												<label for="observaciones" class="form-label">Observaciones</label>
+												<textarea class="form-control" id="observaciones"
+													name="observaciones" rows="2"
+													placeholder="Observaciones adicionales del pedido...">${pedido.observaciones}</textarea>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+ --%>
+							<!-- Productos -->
+							<%-- <div class="card mb-4">
+								<div class="card-header bg-primary text-white">
+									<h5 class="mb-0"><i data-lucide="shopping-cart" class="me-2"></i>Agregar Productos</h5>
+								</div>
+								<div class="card-body">
+									<div class="row">
+										<div class="col-md-4">
+											<div class="mb-3">
+												<label for="productoId" class="form-label">Producto
+													<span class="text-danger">*</span>
+												</label> 
+												<select class="form-select" name="productoId" id="productoId">
+													<option value="">Seleccionar producto...</option>
+													<c:forEach var="producto" items="${productos}">
+														<option value="${producto.productoId}"
+															data-precio="${producto.precio}"
+															data-stock="${producto.stock}">
+															${producto.nombre} - S/. ${producto.precio} (Stock: ${producto.stock})</option>
+													</c:forEach>
+												</select>
+											</div>
+										</div>
+										<div class="col-md-2">
+											<div class="mb-3">
+												<label for="precio" class="form-label">Precio Unitario</label> 
+												<input type="number" class="form-control"
+													id="precio" name="precio" step="0.01"
+													min="0" readonly>
+											</div>
+										</div>
+										<div class="col-md-2">
+											<div class="mb-3">
+												<label for="cantidad" class="form-label">Cantidad <span
+													class="text-danger">*</span></label>
+													<input type="number"
+													class="form-control" id="cantidad" name="cantidad" min="1"
+													value="1">
+											</div>
+										</div>
+										<div class="col-md-2">
+											<div class="mb-3">
+												<label for="subtotalInput" class="form-label">Subtotal</label>
+												<input type="number" class="form-control" id="subtotalInput" step="0.01" readonly>
+											</div>
+										</div>
+										<div class="col-md-2 d-flex align-items-end">
+											<button type="button" class="btn btn-success w-100"
+												id="btnAgregarProducto" onclick="agregarProducto()">
+												<i data-lucide="plus"></i> Añadir
+											</button>
+										</div>
+									</div>
+								</div>
+							</div>
+ --%>
+							<!-- Tabla de productos agregados -->
+							<%-- <div class="card mb-4">
+								<div class="card-header bg-primary text-white">
+									<h5 class="mb-0"><i data-lucide="list" class="me-2"></i>Productos Agregados</h5>
+								</div>
+								<div class="card-body">
+									<div class="table-responsive">
+										<table class="table table-striped table-bordered" id="tablaProductos">
+											<thead class="table-light">
+												<tr>
+													<th>Producto</th>
+													<th>Precio Unitario</th>
+													<th>Cantidad</th>
+													<th>Subtotal</th>
+													<th>Acciones</th>
+												</tr>
+											</thead>
+											<tbody>
+											    <c:choose>
+											        <c:when test="${not empty detalles}">
+											            <c:forEach var="detalle" items="${detalles}" varStatus="status">
+											                <tr>
+											                    <td>${detalle.producto.nombre}</td>
+											                    <td>S/. <fmt:formatNumber value="${detalle.precioUnitario}" type="number" minFractionDigits="2"/></td>
+											                    <td>${detalle.cantidad}</td>
+											                    <td>S/. <fmt:formatNumber value="${detalle.subtotal}" type="number" minFractionDigits="2"/></td>
+											                    <td>
+											                        <button type="button" class="btn btn-danger btn-sm" onclick="eliminarProducto(${status.index})">
+											                            <i data-lucide="trash-2"></i>
+											                        </button>
+											                    </td>
+											                    <!-- Hidden inputs for form submission -->
+											                    <input type="hidden" name="detallesProductoId[]" value="${detalle.productoId}">
+											                    <input type="hidden" name="detallesPrecioUnitario[]" value="${detalle.precioUnitario}">
+											                    <input type="hidden" name="detallesCantidad[]" value="${detalle.cantidad}">
+											                    <input type="hidden" name="detallesSubtotal[]" value="${detalle.subtotal}">
+											                </tr>
+											            </c:forEach>
+											        </c:when>
+											        <c:otherwise>
+											            <tr id="noProductsRow">
+											                <td colspan="5" class="text-center text-muted">
+											                    <i data-lucide="inbox" class="mb-2"></i>
+											                    <p class="mb-0">No hay productos agregados</p>
+											                </td>
+											            </tr>
+											        </c:otherwise>
+											    </c:choose>
+											</tbody>
+										</table>
+									</div>
+								</div>
+							</div>
+ --%>
+							<!-- Totales -->
+							<%-- <div class="row justify-content-end">
+								<div class="col-md-5">
+									<div class="card">
+										<div class="card-header bg-light">
+											<h6 class="mb-0">Resumen del Pedido</h6>
+										</div>
+										<div class="card-body">
+											<div class="row mb-2">
+												<div class="col-6">
+													<strong>Subtotal:</strong>
+												</div>
+												<div class="col-6 text-end">
+													S/. <input type="hidden" name="subtotal" id="inputSubtotal" value="${pedido.subtotal > 0 ? pedido.subtotal : '0.00'}">
+												</div>
+											</div>
+											<div class="row mb-2">
+												<div class="col-6">
+													<strong>IGV (18%):</strong>
+												</div>
+												<div class="col-6 text-end">
+													S/.  <input type="hidden" name="igv" id="inputIgv" value="${pedido.igv > 0 ? pedido.igv : '0.00'}">
+												</div>
+											</div>
+											<hr>
+											<div class="row mb-2">
+												<div class="col-6">
+													<strong>Total:</strong>
+												</div>
+												<div class="col-6 text-end">
+													<h5 class="text-primary">
+														S/.  <input type="hidden" name="total" id="inputTotal" value="${pedido.total > 0 ? pedido.total : '0.00'}">
+													</h5>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+ --%>
+							<!-- Botones de acción -->
+							<%-- <div class="d-flex gap-2 justify-content-end mt-4">
+								<a href="pedidos" class="btn btn-secondary"> <i
+									data-lucide="x"></i> Cancelar
+								</a>
+								<c:choose>
+									<c:when test="${miRol == 'ADMIN'}">
+										<button type="submit" class="btn btn-primary">
+											<i data-lucide="save"></i>
+											<c:out
+												value="${esNuevo ? 'Crear Pedido' : 'Actualizar Pedido'}" />
+										</button>
+									</c:when>
+									<c:when test="${miRol == 'MANAGER' and not esNuevo}">
+										<button type="submit" class="btn btn-primary">
+											<i data-lucide="save"></i> Actualizar Estado
+										</button>
+									</c:when>
+								</c:choose>
+							</div>
+						</form> --%>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<script
+		src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
+	<script src="https://unpkg.com/lucide@latest"></script>
+	<script>
+        lucide.createIcons();
+        
+        document.getElementById('clienteId').addEventListener('change', function() {
+            const selectedOption = this.options[this.selectedIndex];
+            const clienteInfo = document.getElementById('clienteInfo');
+            
+            if (selectedOption.value) {
+                const dni = selectedOption.getAttribute('data-dni');
+                const email = selectedOption.getAttribute('data-email');
+                const telefono = selectedOption.getAttribute('data-telefono');
+                
+                clienteInfo.innerHTML = `
+                    <div><strong>DNI:</strong> ${dni}</div>
+                    <div><strong>Email:</strong> ${email}</div>
+                    <div><strong>Teléfono:</strong> ${telefono}</div>
+                `;
+            } else {
+                clienteInfo.innerHTML = '<small class="text-muted">Seleccione un cliente para ver su información</small>';
+            }
+        });
+        
+        document.getElementById('productoId').addEventListener('change', function() {
+            const selectedOption = this.options[this.selectedIndex];
+            const precio = selectedOption.getAttribute('data-precio');
+            const stock = selectedOption.getAttribute('data-stock');
+            
+            document.getElementById('precio').value = precio || '0.00';
+            document.getElementById('cantidad').max = stock || '999';
+            calcularSubtotal();
+        });
+        
+        const IGV_RATE = 0.18;
+        let productosAgregados = [];
+
+        function calcularSubtotal() {
+            const precio = parseFloat(document.getElementById("precio").value) || 0;
+            const cantidad = parseInt(document.getElementById("cantidad").value) || 0;
+            const subtotal = precio * cantidad;
+            document.getElementById("subtotalInput").value = subtotal.toFixed(2);
+        }
+
+        document.getElementById("precio").addEventListener("input", calcularSubtotal);
+        document.getElementById("cantidad").addEventListener("input", calcularSubtotal);
+
+        function agregarProducto() {
+            const productoSelect = document.getElementById("productoId");
+            const productoId = productoSelect.value;
+            const productoNombre = productoSelect.options[productoSelect.selectedIndex].text;
+            const precioUnitario = parseFloat(document.getElementById("precio").value);
+            const cantidad = parseInt(document.getElementById("cantidad").value);
+            const stock = parseInt(productoSelect.options[productoSelect.selectedIndex].getAttribute('data-stock'));
+
+            if (!productoId || isNaN(precioUnitario) || isNaN(cantidad) || cantidad <= 0) {
+                alert("Complete todos los campos del producto.");
+                return;
+            }
+            
+            if (cantidad > stock) {
+                alert(`La cantidad no puede ser mayor al stock disponible (${stock}).`);
+                return;
+            }
+
+            const subtotal = precioUnitario * cantidad;
+            
+            // Check if product already exists
+            const existingIndex = productosAgregados.findIndex(p => p.productoId === productoId);
+            if (existingIndex >= 0) {
+                productosAgregados[existingIndex].cantidad += cantidad;
+                productosAgregados[existingIndex].subtotal = productosAgregados[existingIndex].cantidad * precioUnitario;
+            } else {
+                productosAgregados.push({
+                    productoId: productoId,
+                    nombre: productoNombre.split(' - ')[0],
+                    precioUnitario: precioUnitario,
+                    cantidad: cantidad,
+                    subtotal: subtotal
+                });
+            }
+
+            actualizarTablaProductos();
+            calcularTotales();
+            
+            // Reset form
+            document.getElementById("productoId").value = "";
+            document.getElementById("precio").value = "";
+            document.getElementById("cantidad").value = "1";
+            document.getElementById("subtotalInput").value = "";
+        }
+
+        function actualizarTablaProductos() {
+            const tbody = document.querySelector("#tablaProductos tbody");
+            tbody.innerHTML = "";
+            
+            if (productosAgregados.length === 0) {
+                tbody.innerHTML = `
+                    <tr id="noProductsRow">
+                        <td colspan="5" class="text-center text-muted">
+                            <i data-lucide="inbox" class="mb-2"></i>
+                            <p class="mb-0">No hay productos agregados</p>
+                        </td>
+                    </tr>
+                `;
+                lucide.createIcons();
+                return;
+            }
+
+            productosAgregados.forEach((producto, index) => {
+                const row = `
+                    <tr>
+                        <td>${producto.nombre}</td>
+                        <td>S/. ${producto.precioUnitario.toFixed(2)}</td>
+                        <td>${producto.cantidad}</td>
+                        <td>S/. ${producto.subtotal.toFixed(2)}</td>
+                        <td>
+                            <button type="button" class="btn btn-danger btn-sm" onclick="eliminarProducto(${index})">
+                                <i data-lucide="trash-2"></i>
+                            </button>
+                        </td>
+                        <input type="hidden" name="detallesProductoId[]" value="${producto.productoId}">
+                        <input type="hidden" name="detallesPrecioUnitario[]" value="${producto.precioUnitario}">
+                        <input type="hidden" name="detallesCantidad[]" value="${producto.cantidad}">
+                        <input type="hidden" name="detallesSubtotal[]" value="${producto.subtotal}">
+                    </tr>
+                `;
+                tbody.innerHTML += row;
+            });
+            
+            lucide.createIcons();
+        }
+
+        function eliminarProducto(index) {
+            if (confirm('¿Desea eliminar este producto del pedido?')) {
+                productosAgregados.splice(index, 1);
+                actualizarTablaProductos();
+                calcularTotales();
+            }
+        }
+
+        function calcularTotales() {
+            const subtotal = productosAgregados.reduce((sum, producto) => sum + producto.subtotal, 0);
+            const igv = subtotal * IGV_RATE;
+            const total = subtotal + igv;
+
+            document.getElementById("spanSubtotal").textContent = subtotal.toFixed(2);
+            document.getElementById("spanIgv").textContent = igv.toFixed(2);
+            document.getElementById("spanTotal").textContent = total.toFixed(2);
+            
+            document.getElementById("inputSubtotal").value = subtotal.toFixed(2);
+            document.getElementById("inputIgv").value = igv.toFixed(2);
+            document.getElementById("inputTotal").value = total.toFixed(2);
+        }
+
+        // Initialize with existing products if editing
+        <c:if test="${not empty detalles}">
+            <c:forEach var="detalle" items="${detalles}">
+                productosAgregados.push({
+                    productoId: '${detalle.productoId}',
+                    nombre: '${detalle.producto.nombre}',
+                    precioUnitario: ${detalle.precioUnitario},
+                    cantidad: ${detalle.cantidad},
+                    subtotal: ${detalle.subtotal}
+                });
+            </c:forEach>
+            calcularTotales();
+        </c:if>
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const clienteSelect = document.getElementById('clienteId');
+            if (clienteSelect.value) {
+                clienteSelect.dispatchEvent(new Event('change'));
+            }
+            
+            <c:if test="${esNuevo}">
+                const now = new Date();
+                const year = now.getFullYear();
+                const month = String(now.getMonth() + 1).padStart(2, '0');
+                const day = String(now.getDate()).padStart(2, '0');
+                const hours = String(now.getHours()).padStart(2, '0');
+                const minutes = String(now.getMinutes()).padStart(2, '0');
+                const currentDateTime = `${year}-${month}-${day}T${hours}:${minutes}`;
+                document.getElementById('fechaPedido').value = currentDateTime;
+            </c:if>
+        });
+    </script>
