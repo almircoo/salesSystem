@@ -1,37 +1,39 @@
 package entidades;
 
 public class DetallePedido {
-	private int detalleId;
-	private int pedidoId;
-	private int productoId;
-	private String producto;
-	private int cantidad;
-	private double precioUnitario;
-	private double subtotal;
 	
+    private int detalleId;
+    private int pedidoId;
+    private int productoId;
+    private int cantidad;
+    private double precioUnitario;
+    private double subtotal;
+    
+    // Relaciones
+    private Pedido pedido;
+    private Producto producto;
+    
 	public DetallePedido() {
-		this(0,0,0,"",0,0.0,0.0);
+		this(0,0,0,0,0.0,0.0);
 	}
 	
-	public DetallePedido(int pedidoId, int productoId, String producto, int cantidad,
+	public DetallePedido(int pedidoId, int productoId, int cantidad,
 			double precioUnitario, double subtotal) {
 		super();
 		this.pedidoId = pedidoId;
 		this.productoId = productoId;
-		this.producto = producto;
 		this.cantidad = cantidad;
 		this.precioUnitario = precioUnitario;
 		this.subtotal = subtotal;
 	}
 	
 	
-	public DetallePedido(int detalleId, int pedidoId, int productoId, String producto, int cantidad,
+	public DetallePedido(int detalleId, int pedidoId, int productoId, int cantidad,
 			double precioUnitario, double subtotal) {
 		super();
 		this.detalleId = detalleId;
 		this.pedidoId = pedidoId;
 		this.productoId = productoId;
-		this.producto = producto;
 		this.cantidad = cantidad;
 		this.precioUnitario = precioUnitario;
 		this.subtotal = subtotal;
@@ -61,14 +63,6 @@ public class DetallePedido {
 		this.productoId = productoId;
 	}
 
-	public String getProducto() {
-		return producto;
-	}
-
-	public void setProducto(String producto) {
-		this.producto = producto;
-	}
-
 	public int getCantidad() {
 		return cantidad;
 	}
@@ -93,9 +87,25 @@ public class DetallePedido {
 		this.subtotal = subtotal;
 	}
 	
-	
-	
-	
-	
+    public void calcularSubtotal() {
+        this.subtotal = this.cantidad * this.precioUnitario;
+    }
 
+	public Pedido getPedido() {
+		return pedido;
+	}
+
+	public void setPedido(Pedido pedido) {
+		this.pedido = pedido;
+	}
+
+	public Producto getProducto() {
+		return producto;
+	}
+
+	public void setProducto(Producto producto) {
+		this.producto = producto;
+	}
+
+    
 }

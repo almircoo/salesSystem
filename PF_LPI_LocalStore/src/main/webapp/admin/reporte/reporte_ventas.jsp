@@ -2,6 +2,10 @@
 <%@page import="java.util.Map"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+    
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -28,10 +32,10 @@
 				<%@include file="/../shared/admin/navbar.jsp" %>
 				
 				<%
-					ArrayList<Map<String, Object>> ventasPorFecha = (ArrayList<Map<String, Object>>)request.getAttribute("ventasPorFecha");
+					/* ArrayList<Map<String, Object>> ventasPorFecha = (ArrayList<Map<String, Object>>)request.getAttribute("ventasPorFecha");
 					ArrayList<Map<String, Object>> productosMasVendidos = (ArrayList<Map<String, Object>>)request.getAttribute("productosMasVendidos");
 					String fechaInicio = (String)request.getAttribute("fechaInicio");
-					String fechaFin = (String)request.getAttribute("fechaFin");
+					String fechaFin = (String)request.getAttribute("fechaFin"); */
 				%>
 				
 				<!-- Agregando header con filtros de fecha -->
@@ -52,11 +56,11 @@
 							<input type="hidden" name="opcion" value="ventas">
 							<div class="col-md-4">
 								<label class="form-label">Fecha Inicio</label>
-								<input type="date" class="form-control" name="fechaInicio" value="<%= fechaInicio %>">
+								<input type="date" class="form-control" name="fechaInicio" value="${param.fechaInicio}">
 							</div>
 							<div class="col-md-4">
 								<label class="form-label">Fecha Fin</label>
-								<input type="date" class="form-control" name="fechaFin" value="<%= fechaFin %>">
+								<input type="date" class="form-control" name="fechaFin" value="${param.fechaFin}">
 							</div>
 							<div class="col-md-2">
 								<label class="form-label">&nbsp;</label>
@@ -88,31 +92,34 @@
 											</tr>
 										</thead>
 										<tbody>
-										<% 
-											double totalGeneral = 0;
-											int totalPedidos = 0;
-											if (ventasPorFecha != null) {
-												for(Map<String, Object> venta : ventasPorFecha) {
-													totalGeneral += (Double)venta.get("totalVentas");
-													totalPedidos += (Integer)venta.get("totalPedidos");
-										%>
-											<tr>
-												<td><%= venta.get("fecha") %></td>
-												<td><%= venta.get("totalPedidos") %></td>
-												<td>S/. <%= String.format("%.2f", (Double)venta.get("totalVentas")) %></td>
-												<td>S/. <%= String.format("%.2f", (Double)venta.get("promedioVenta")) %></td>
-											</tr>
-										<% 
-												}
-											}
-										%>
+											<c:choose>
+											    <c:when test="${not empty ventasPorFecha}">
+											        <c:set var="totalGeneral" value="0" />
+											        <c:set var="totalPedidos" value="0" />
+											        <c:forEach var="venta" items="${ventasPorFecha}">
+											            <c:set var="totalGeneral" value="${totalGeneral + venta.totalVentas}" />
+											            <c:set var="totalPedidos" value="${totalPedidos + venta.totalPedidos}" />
+	    											    <tr>
+	        												<td>${venta.fecha}</td>
+	        												<td>${venta.totalPedidos}</td>
+	        												<td>S/. <fmt:formatNumber value="${venta.totalVentas}" pattern="#,##0.00"/></td>
+	        												<td>S/. <fmt:formatNumber value="${venta.promedioVenta}" pattern="#,##0.00"/></td>
+	    												</tr>
+											        </c:forEach>
+											    </c:when>
+											    <c:otherwise>
+											        <tr>
+											            <td colspan="4" class="text-center">No hay datos de ventas en este período.</td>
+											        </tr>
+											    </c:otherwise>
+											</c:choose>
 										</tbody>
 										<tfoot>
 											<tr class="table-active">
 												<th>Total</th>
-												<th><%= totalPedidos %></th>
-												<th>S/. <%= String.format("%.2f", totalGeneral) %></th>
-												<th>S/. <%= totalPedidos > 0 ? String.format("%.2f", totalGeneral / totalPedidos) : "0.00" %></th>
+												<th>${totalPedidos}</th>
+												<th>S/. <fmt:formatNumber value="${totalGeneral}" pattern="#,##0.00"/></th>
+												<th>S/. <fmt:formatNumber value="${totalPedidos > 0 ? totalGeneral / totalPedidos : 0}" pattern="#,##0.00"/></th>
 											</tr>
 										</tfoot>
 									</table>
@@ -143,25 +150,24 @@
 								<h5 class="mb-0">Productos Más Vendidos</h5>
 							</div>
 							<div class="card-body">
-								<% 
-									if (productosMasVendidos != null && !productosMasVendidos.isEmpty()) {
-										for(Map<String, Object> producto : productosMasVendidos) {
-								%>
-								<div class="d-flex justify-content-between align-items-center mb-3">
-									<div>
-										<strong><%= producto.get("producto") %></strong>
-										<br><small class="text-muted">Vendidos: <%= producto.get("totalVendido") %></small>
-									</div>
-									<div class="text-end">
-										<small>S/. <%= String.format("%.2f", (Double)producto.get("totalIngresos")) %></small>
-									</div>
-								</div>
-								<% 
-										}
-									} else {
-								%>
-								<p class="text-muted">No hay datos de productos vendidos en este período.</p>
-								<% } %>
+								<c:choose>
+									<c:when test="${not empty productosMasVendidos}">
+										<c:forEach var="producto" items="${productosMasVendidos}">
+										<div class="d-flex justify-content-between align-items-center mb-3">
+											<div>
+												<strong>${producto.producto}</strong>
+												<br><small class="text-muted">Vendidos: ${producto.totalVendido}</small>
+											</div>
+											<div class="text-end">
+												<small>S/. <fmt:formatNumber value="${producto.totalIngresos}" pattern="#,##0.00"/></small>
+											</div>
+										</div>
+										</c:forEach>
+									</c:when>
+									<c:otherwise>
+										<p class="text-muted">No hay datos de productos vendidos en este período.</p>
+									</c:otherwise>
+								</c:choose>
 							</div>
 						</div>
 					</div>
@@ -197,30 +203,16 @@
 			type: 'line',
 			data: {
 				labels: [
-					<% 
-						if (ventasPorFecha != null) {
-							for(int i = 0; i < ventasPorFecha.size(); i++) {
-								Map<String, Object> venta = ventasPorFecha.get(i);
-					%>
-					'<%= venta.get("fecha") %>'<%= i < ventasPorFecha.size() - 1 ? "," : "" %>
-					<% 
-							}
-						}
-					%>
+					<c:forEach var="venta" items="${ventasPorFecha}" varStatus="loop">
+						'${venta.fecha}'<c:if test="${!loop.last}">,</c:if>
+					</c:forEach>
 				],
 				datasets: [{
 					label: 'Ventas (S/.)',
 					data: [
-						<% 
-							if (ventasPorFecha != null) {
-								for(int i = 0; i < ventasPorFecha.size(); i++) {
-									Map<String, Object> venta = ventasPorFecha.get(i);
-						%>
-						<%= venta.get("totalVentas") %><%= i < ventasPorFecha.size() - 1 ? "," : "" %>
-						<% 
-								}
-							}
-						%>
+						<c:forEach var="venta" items="${ventasPorFecha}" varStatus="loop">
+							${venta.totalVentas}<c:if test="${!loop.last}">,</c:if>
+						</c:forEach>
 					],
 					borderColor: 'rgb(75, 192, 192)',
 					backgroundColor: 'rgba(75, 192, 192, 0.2)',
@@ -253,7 +245,11 @@
 			type: 'doughnut',
 			data: {
 				labels: [
-					<% 
+					<c:forEach var="producto" items="${productosMasVendidos}" varStatus="loop">
+						'${producto.producto}'<c:if test="${!loop.last}">,</c:if>
+					</c:forEach>
+					
+					<%-- <% 
 						if (productosMasVendidos != null) {
 							for(int i = 0; i < Math.min(5, productosMasVendidos.size()); i++) {
 								Map<String, Object> producto = productosMasVendidos.get(i);
@@ -262,20 +258,13 @@
 					<% 
 							}
 						}
-					%>
+					%> --%>
 				],
 				datasets: [{
 					data: [
-						<% 
-							if (productosMasVendidos != null) {
-								for(int i = 0; i < Math.min(5, productosMasVendidos.size()); i++) {
-									Map<String, Object> producto = productosMasVendidos.get(i);
-						%>
-						<%= producto.get("totalVendido") %><%= i < Math.min(4, productosMasVendidos.size() - 1) ? "," : "" %>
-						<% 
-								}
-							}
-						%>
+						<c:forEach var="producto" items="${productosMasVendidos}" varStatus="loop">
+							${producto.totalVendido}<c:if test="${!loop.last}">,</c:if>
+						</c:forEach>
 					],
 					backgroundColor: [
 						'rgba(255, 99, 132, 0.8)',

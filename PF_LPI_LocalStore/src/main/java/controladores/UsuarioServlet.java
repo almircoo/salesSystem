@@ -77,6 +77,7 @@ public class UsuarioServlet extends HttpServlet {
 					break;
 				default:
 					this.lista(request, response);
+					break;
 			}
 		}
 	}

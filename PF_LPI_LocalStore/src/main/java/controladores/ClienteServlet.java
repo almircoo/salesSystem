@@ -54,6 +54,7 @@ public class ClienteServlet extends HttpServlet {
 					} else {
 						this.eliminar(request, response);
 					}
+					break;
 				default:
 					this.lista(request, response);
 			}

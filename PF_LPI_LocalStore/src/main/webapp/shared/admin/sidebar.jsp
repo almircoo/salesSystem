@@ -49,7 +49,7 @@
 			<li class="list-group-item fw-bold ${activepage == 'pedidos' ? 'active':''}" style="border: none">
 				<a href="pedidos" class="text-decoration-none text-dark d-flex align-items-center" data-page="pedidos">
 					<i data-lucide="receipt-text" class="me-2"></i>
-					 Pedidos
+					 Ventas
 				</a>
 			</li>
 			<!--  -->

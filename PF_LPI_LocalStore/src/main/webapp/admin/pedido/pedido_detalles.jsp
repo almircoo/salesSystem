@@ -1,7 +1,9 @@
 <%@page import="entidades.Pedido"%>
 <%@page import="entidades.DetallePedido"%>
+<%@page import="entidades.Cliente"%>
+<%@page import="entidades.Producto"%>
 <%@page import="java.util.ArrayList"%>
-<%@page import="java.time.format.DateTimeFormatter"%>
+<%@page import="java.text.SimpleDateFormat"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -31,7 +33,8 @@
 				<%
 					Pedido pedido = (Pedido)request.getAttribute("pedido");
 					ArrayList<DetallePedido> detalles = (ArrayList<DetallePedido>)request.getAttribute("detalles");
-					DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
+					SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+					/* DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"); */
 				%>
 				
 				<!-- Agregando header con navegación -->
@@ -63,7 +66,8 @@
 								</div>
 								<div class="row mb-2">
 									<div class="col-sm-4"><strong>Fecha:</strong></div>
-									<div class="col-sm-8"><%= pedido.getFechaPedido().format(formatter) %></div>
+									<div class="col-sm-8"><%= formatter.format(pedido.getFechaPedido()) %></div> 
+									<!-- pedido.getFechaPedido().format(formatter) -->
 								</div>
 								<div class="row mb-2">
 									<div class="col-sm-4"><strong>Estado:</strong></div>
@@ -119,7 +123,7 @@
 										totalCalculado += d.getSubtotal();
 								%>
 									<tr>
-										<td><%= d.getProducto() %></td>
+										<td><%= d.getProducto().getNombre() %></td>
 										<td><%= d.getCantidad() %></td>
 										<td>S/. <%= String.format("%.2f", d.getPrecioUnitario()) %></td>
 										<td>S/. <%= String.format("%.2f", d.getSubtotal()) %></td>
@@ -148,5 +152,7 @@
      <script>
        lucide.createIcons();
      </script>
+	
+	
 </body>
 </html>

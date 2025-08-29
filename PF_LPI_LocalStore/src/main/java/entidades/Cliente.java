@@ -88,6 +88,11 @@ public class Cliente {
 	public void setFechaNac(String fechaNac) {
 		this.fechaNac = fechaNac;
 	}
+
+	@Override
+	public String toString() {
+		return "" + nombre + "";
+	}
 	
 	
 	

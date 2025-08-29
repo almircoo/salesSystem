@@ -60,6 +60,7 @@ public class ReporteServlet extends HttpServlet {
 			case "clientes": this.reporteClientes(request, response); break;
 			default:
 				this.reporteGeneral(request, response);
+				break;
 		}
 		
 	}

@@ -5,6 +5,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -27,12 +28,7 @@
 			
 			<!-- content -->
 			<div class="col-md-9">
-				<%@include file="/../shared/admin/navbar.jsp" %>
-				<%
-					Map<String, Object> estadisticas = (Map<String, Object>)request.getAttribute("estadisticas");
-					ArrayList<Pedido> pedidosRecientes = (ArrayList<Pedido>)request.getAttribute("pedidosRecientes");
-				%>
-				
+				 <%@include file="/../shared/admin/navbar.jsp" %>
 				<!-- Agregando header de reportes -->
 				<div class="mt-5 d-flex justify-content-between align-items-center">
                      <div>
@@ -57,7 +53,7 @@
 						<div class="card rounded-4 text-center">
 							<div class="card-body">
 								<i data-lucide="shopping-cart" class="text-primary mb-2" style="width: 48px; height: 48px;"></i>
-								<h4 class="fw-bold"><%= estadisticas.get("totalPedidos") %></h4>
+								<h4 class="fw-bold">${estadisticas.totalPedidos}</h4>
 								<p class="text-muted mb-0">Total Pedidos</p>
 							</div>
 						</div>
@@ -66,7 +62,7 @@
 						<div class="card rounded-4 text-center">
 							<div class="card-body">
 								<i data-lucide="dollar-sign" class="text-success mb-2" style="width: 48px; height: 48px;"></i>
-								<h4 class="fw-bold">S/. <%= String.format("%.2f", (Double)estadisticas.get("totalVentas")) %></h4>
+								<h4 class="fw-bold">S/. <fmt:formatNumber value="${estadisticas.totalVentas}" pattern="#,##0.00"/></h4>
 								<p class="text-muted mb-0">Total Ventas</p>
 							</div>
 						</div>
@@ -75,7 +71,7 @@
 						<div class="card rounded-4 text-center">
 							<div class="card-body">
 								<i data-lucide="users" class="text-info mb-2" style="width: 48px; height: 48px;"></i>
-								<h4 class="fw-bold"><%= estadisticas.get("totalClientes") %></h4>
+								<h4 class="fw-bold">${estadisticas.totalClientes}</h4>
 								<p class="text-muted mb-0">Total Clientes</p>
 							</div>
 						</div>
@@ -84,7 +80,7 @@
 						<div class="card rounded-4 text-center">
 							<div class="card-body">
 								<i data-lucide="package" class="text-warning mb-2" style="width: 48px; height: 48px;"></i>
-								<h4 class="fw-bold"><%= estadisticas.get("productosActivos") %></h4>
+								<h4 class="fw-bold">${estadisticas.productosActivos}</h4>
 								<p class="text-muted mb-0">Productos Activos</p>
 							</div>
 						</div>
@@ -98,21 +94,24 @@
 								<h5 class="mb-0">Alertas del Sistema</h5>
 							</div>
 							<div class="card-body">
-								<% if ((Integer)estadisticas.get("pedidosPendientes") > 0) { %>
-								<div class="alert alert-warning d-flex align-items-center" role="alert">
-									<i data-lucide="alert-triangle" class="me-2"></i>
-									<div>
-										Tienes <strong><%= estadisticas.get("pedidosPendientes") %></strong> pedidos pendientes por procesar.
-									</div>
-								</div>
-								<% } else { %>
-								<div class="alert alert-success d-flex align-items-center" role="alert">
-									<i data-lucide="check-circle" class="me-2"></i>
-									<div>
-										¡Excelente! No hay pedidos pendientes.
-									</div>
-								</div>
-								<% } %>
+								<c:choose>
+									<c:when test="${estadisticas.pedidosPendientes > 0}">
+										<div class="alert alert-warning d-flex align-items-center" role="alert">
+											<i data-lucide="alert-triangle" class="me-2"></i>
+											<div>
+												Tienes <strong>${estadisticas.pedidosPendientes}</strong> pedidos pendientes por procesar.
+											</div>
+										</div>
+									</c:when>
+									<c:otherwise>
+										<div class="alert alert-success d-flex align-items-center" role="alert">
+											<i data-lucide="check-circle" class="me-2"></i>
+											<div>
+												¡Excelente! No hay pedidos pendientes.
+											</div>
+										</div>
+									</c:otherwise>
+								</c:choose>
 							</div>
 						</div>
 					</div>
@@ -123,29 +122,29 @@
 								<h5 class="mb-0">Pedidos Recientes</h5>
 							</div>
 							<div class="card-body">
-								<% 
-									DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM HH:mm");
-									if (pedidosRecientes != null && !pedidosRecientes.isEmpty()) {
-										for(int i = 0; i < Math.min(5, pedidosRecientes.size()); i++) {
-											Pedido p = pedidosRecientes.get(i);
-								%>
-								<div class="d-flex justify-content-between align-items-center mb-2">
-									<div>
-										<strong>#<%= p.getPedidoId() %></strong> - <%= p.getCliente() %>
-										<br><small class="text-muted"><%= p.getFechaPedido().format(formatter) %></small>
-									</div>
-									<div class="text-end">
-										<span class="badge bg-primary"><%= p.getEstado() %></span>
-										<br><small>S/. <%= String.format("%.2f", p.getTotal()) %></small>
-									</div>
-								</div>
-								<% if (i < Math.min(4, pedidosRecientes.size() - 1)) { %><hr><% } %>
-								<% 
-										}
-									} else {
-								%>
-								<p class="text-muted">No hay pedidos recientes.</p>
-								<% } %>
+								<c:choose>
+									<c:when test="${not empty pedidosRecientes}">
+										<c:forEach items="${pedidosRecientes}" var="pedido" end="4" varStatus="loop">
+											<div class="d-flex justify-content-between align-items-center mb-2">
+												<div>
+													<strong>#${pedido.pedidoId}</strong> - ${pedido.cliente}
+													<br><small class="text-muted"><fmt:formatDate value="${pedido.fechaPedido}" pattern="dd/MM HH:mm" /></small>
+												</div>
+												<div class="text-end">
+													<span class="badge bg-primary">${pedido.estado}</span>
+													<br><small>S/. <fmt:formatNumber value="${pedido.total}" pattern="#,##0.00"/></small>
+												</div>
+											</div>
+											<c:if test="${!loop.last}">
+												<hr>
+											</c:if>
+										</c:forEach>
+									</c:when>
+									<c:otherwise>
+										<p class="text-muted">No hay pedidos recientes.</p>
+									</c:otherwise>
+								</c:choose>
+								
 							</div>
 						</div>
 					</div>
@@ -186,6 +185,9 @@
 	<script src="https://unpkg.com/lucide@latest"></script>
 	<script>
 		lucide.createIcons();
+	</script>
+	<script>
+		
 		
 		// Gráfico de estadísticas generales
 		const estadisticasCtx = document.getElementById('estadisticasChart').getContext('2d');
@@ -196,10 +198,10 @@
 				datasets: [{
 					label: 'Cantidad',
 					data: [
-						<%= estadisticas.get("totalPedidos") %>,
-						<%= estadisticas.get("totalClientes") %>,
-						<%= estadisticas.get("productosActivos") %>,
-						<%= Math.round((Double)estadisticas.get("totalVentas") / 1000) %>
+						${estadisticas.totalPedidos},
+						${estadisticas.totalClientes},
+						${estadisticas.productosActivos},
+						<fmt:formatNumber value="${estadisticas.totalVentas / 1000}" pattern="0"/>
 					],
 					backgroundColor: [
 						'rgba(54, 162, 235, 0.8)',
@@ -239,8 +241,8 @@
 				labels: ['Pendientes', 'Procesados'],
 				datasets: [{
 					data: [
-						<%= estadisticas.get("pedidosPendientes") %>,
-						<%= (Integer)estadisticas.get("totalPedidos") - (Integer)estadisticas.get("pedidosPendientes") %>
+						${estadisticas.pedidosPendientes},
+						${estadisticas.totalPedidos - estadisticas.pedidosPendientes}
 					],
 					backgroundColor: [
 						'rgba(255, 193, 7, 0.8)',

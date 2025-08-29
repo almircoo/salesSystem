@@ -66,14 +66,12 @@
 													<th scope="row">${c.categoriaId}</th>
 													<td>${ c.nombre }</td>
 													<td>
-														<c:choose>
-															<c:when test="c.estado">
-																<span class="badge order-status-delivered">Activado</span>
-															</c:when>
-															<c:otherwise>
-																<span class="badge danger-status">Desactivado</span>
-															</c:otherwise>
-														</c:choose>
+														<c:if test="${c.estado}">
+														    <span class="badge order-status-delivered">Activado</span>
+														</c:if>
+														<c:if test="${not c.estado}">
+														    <span class="badge danger-status">Desactivado</span>
+														</c:if>
 													</td>
 													<td>
 														<div class="d-flex justify-content-start">

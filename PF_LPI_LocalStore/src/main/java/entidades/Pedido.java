@@ -1,44 +1,81 @@
 package entidades;
 
-import java.time.LocalDateTime;
+import java.util.Date;
+import java.util.List;
 
 public class Pedido {
 	private int pedidoId;
 	private int clienteId;
-	private String cliente;
-	private LocalDateTime fechaPedido;
-	private String estado; //PENDIENTE, PROCESANDO, EN CAMINO, ENTREGADO, CANCELADO
+	private int usuarioId;
+	private Date fechaPedido;
+	private String tipoComprobante;
+	private String numeroComprobante;
+	private double subtotal;
+	private double igv;
 	private double total;
+	private String metodoPago;
+	private String estado;
 	private String observaciones;
-	
-	
-	public Pedido(int pedidoId, int clienteId, String cliente, LocalDateTime fechaPedido, String estado, double total,
-			String observaciones) {
-		super();
-		this.pedidoId = pedidoId;
-		this.clienteId = clienteId;
-		this.cliente = cliente;
-		this.fechaPedido = fechaPedido;
-		this.estado = estado;
-		this.total = total;
-		this.observaciones = observaciones;
-	}
-	
-	public Pedido(int clienteId, String cliente, LocalDateTime fechaPedido, String estado, double total,
-			String observaciones) {
-		super();
-		this.clienteId = clienteId;
-		this.cliente = cliente;
-		this.fechaPedido = fechaPedido;
-		this.estado = estado;
-		this.total = total;
-		this.observaciones = observaciones;
-	}
+
+	private Cliente cliente;
+	private Usuario usuario;
+	private List<DetallePedido> detalles;
+
 	public Pedido() {
-		this(0,0,"",null,"PENDIENTE", 0.0, "");
+		this(0, 0, new Date(), "", "", 0.0, 0.0, 0.0, "", "", "");
 	}
 
-	//GET AND SETTERS
+	public Pedido(int clienteId, int usuarioId, Date fechaPedido, String tipoComprobante, String numeroComprobante,
+			double subtotal, double igv, double total, String metodoPago, String estado, String observaciones) {
+		this.clienteId = clienteId;
+		this.usuarioId = usuarioId;
+		this.fechaPedido = fechaPedido;
+		this.tipoComprobante = tipoComprobante;
+		this.numeroComprobante = numeroComprobante;
+		this.subtotal = subtotal;
+		this.igv = igv;
+		this.total = total;
+		this.metodoPago = metodoPago;
+		this.estado = estado;
+		this.observaciones = observaciones;
+	}
+
+	public Pedido(int clienteId, int usuarioId, String tipoComprobante, String numeroComprobante, double subtotal,
+			double igv, double total, String metodoPago, String estado, String observaciones,
+			List<DetallePedido> detalles) {
+		this.clienteId = clienteId;
+		this.usuarioId = usuarioId;
+		this.tipoComprobante = tipoComprobante;
+		this.numeroComprobante = numeroComprobante;
+		this.subtotal = subtotal;
+		this.igv = igv;
+		this.total = total;
+		this.metodoPago = metodoPago;
+		this.estado = estado;
+		this.observaciones = observaciones;
+		this.detalles = detalles;
+	}
+
+	public Pedido(int pedidoId, int clienteId, int usuarioId, Date fechaPedido, String tipoComprobante,
+			String numeroComprobante, double subtotal, double igv, double total, String metodoPago, String estado,
+			String observaciones, Cliente cliente, Usuario usuario, List<DetallePedido> detalles) {
+		this.pedidoId = pedidoId;
+		this.clienteId = clienteId;
+		this.usuarioId = usuarioId;
+		this.fechaPedido = fechaPedido;
+		this.tipoComprobante = tipoComprobante;
+		this.numeroComprobante = numeroComprobante;
+		this.subtotal = subtotal;
+		this.igv = igv;
+		this.total = total;
+		this.metodoPago = metodoPago;
+		this.estado = estado;
+		this.observaciones = observaciones;
+		this.cliente = cliente;
+		this.usuario = usuario;
+		this.detalles = detalles;
+	}
+
 	public int getPedidoId() {
 		return pedidoId;
 	}
@@ -55,28 +92,52 @@ public class Pedido {
 		this.clienteId = clienteId;
 	}
 
-	public String getCliente() {
-		return cliente;
+	public int getUsuarioId() {
+		return usuarioId;
 	}
 
-	public void setCliente(String cliente) {
-		this.cliente = cliente;
+	public void setUsuarioId(int usuarioId) {
+		this.usuarioId = usuarioId;
 	}
 
-	public LocalDateTime getFechaPedido() {
+	public Date getFechaPedido() {
 		return fechaPedido;
 	}
 
-	public void setFechaPedido(LocalDateTime fechaPedido) {
+	public void setFechaPedido(Date fechaPedido) {
 		this.fechaPedido = fechaPedido;
 	}
 
-	public String getEstado() {
-		return estado;
+	public String getTipoComprobante() {
+		return tipoComprobante;
 	}
 
-	public void setEstado(String estado) {
-		this.estado = estado;
+	public void setTipoComprobante(String tipoComprobante) {
+		this.tipoComprobante = tipoComprobante;
+	}
+
+	public String getNumeroComprobante() {
+		return numeroComprobante;
+	}
+
+	public void setNumeroComprobante(String numeroComprobante) {
+		this.numeroComprobante = numeroComprobante;
+	}
+
+	public double getSubtotal() {
+		return subtotal;
+	}
+
+	public void setSubtotal(double subtotal) {
+		this.subtotal = subtotal;
+	}
+
+	public double getIgv() {
+		return igv;
+	}
+
+	public void setIgv(double igv) {
+		this.igv = igv;
 	}
 
 	public double getTotal() {
@@ -87,6 +148,22 @@ public class Pedido {
 		this.total = total;
 	}
 
+	public String getMetodoPago() {
+		return metodoPago;
+	}
+
+	public void setMetodoPago(String metodoPago) {
+		this.metodoPago = metodoPago;
+	}
+
+	public String getEstado() {
+		return estado;
+	}
+
+	public void setEstado(String estado) {
+		this.estado = estado;
+	}
+
 	public String getObservaciones() {
 		return observaciones;
 	}
@@ -94,8 +171,54 @@ public class Pedido {
 	public void setObservaciones(String observaciones) {
 		this.observaciones = observaciones;
 	}
-	
-	
-	
 
+	public Cliente getCliente() {
+		return cliente;
+	}
+
+	public void setCliente(Cliente cliente) {
+		this.cliente = cliente;
+	}
+
+	public Usuario getUsuario() {
+		return usuario;
+	}
+
+	public void setUsuario(Usuario usuario) {
+		this.usuario = usuario;
+	}
+
+	public List<DetallePedido> getDetalles() {
+		return detalles;
+	}
+
+	public void setDetalles(List<DetallePedido> detalles) {
+		this.detalles = detalles;
+	}
+
+	public void calcularTotales() {
+		if (detalles != null) {
+			this.subtotal = detalles.stream().mapToDouble(DetallePedido::getSubtotal).sum();
+			this.igv = this.subtotal * 0.18;
+			this.total = this.subtotal + this.igv;
+		}
+	}
+
+	public void agregarDetalle(DetallePedido detalle) {
+		if (detalles != null) {
+			detalles.add(detalle);
+			calcularTotales();
+		}
+	}
+
+	@Override
+	public String toString() {
+		return "Pedido [pedidoId=" + pedidoId + ", clienteId=" + clienteId + ", usuarioId=" + usuarioId
+				+ ", fechaPedido=" + fechaPedido + ", tipoComprobante=" + tipoComprobante + ", numeroComprobante="
+				+ numeroComprobante + ", subtotal=" + subtotal + ", igv=" + igv + ", total=" + total + ", metodoPago="
+				+ metodoPago + ", estado=" + estado + ", observaciones=" + observaciones + ", cliente=" + cliente
+				+ ", usuario=" + usuario + ", detalles=" + detalles + "]";
+	}
+
+	
 }

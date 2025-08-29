@@ -4,6 +4,7 @@ import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import db.MySQLConexion;
 import entidades.Categoria;
@@ -36,8 +37,10 @@ public class CategoriaDAO implements ICategoriaDAO {
 			ps.setBoolean(2, obj.getEstado());
 			
 			value = ps.executeUpdate();
+			
 		} catch (Exception e) {
 			System.out.println("Error al crear: " + e.getMessage());
+			
 		} finally {
 			MySQLConexion.closeConexion(con);
 		}

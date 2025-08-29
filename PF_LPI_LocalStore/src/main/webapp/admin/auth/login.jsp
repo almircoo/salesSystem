@@ -20,7 +20,7 @@
 
                         <form action="auth?opcion=autenticar" method="POST">
                             <div class="mb-3">
-                                <label for="email" class="form-label">Email</label>
+                                <label for="email" class="form-label">Usuario</label>
                                 <input type="text" id="nombre" name="nombre" class="form-control" placeholder="Nombre" />
                             </div>
 

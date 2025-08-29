@@ -5,6 +5,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -16,6 +17,7 @@
 <link rel="stylesheet" href="https://unpkg.com/lucide@latest/dist/lucide.min.css">
 </head>
 <body>
+
 	<div class="container" >
 		
 		<div class="row justify-content-center mt-3">
@@ -28,25 +30,38 @@
 			<div class="col-md-9">
 				<!-- Listar pedido aqui -->
 				<%@include file="/../shared/admin/navbar.jsp" %>
-				<%
-					/* ArrayList<Pedido> lista = (ArrayList<Pedido>)request.getAttribute("lista");
-					HttpSession miSession = request.getSession(); 
-					Usuario userRole = new Usuario();
-					if (miSession .getAttribute("usuario") != null) userRole = (Usuario) miSession.getAttribute("usuario");
-					String miRol = userRole.getRol(); */
-				%>
 				
-				<!-- Agregando header con título y filtros -->
+				<!-- Added message display for user feedback -->
+				<c:if test="${not empty sessionScope.mensaje}">
+					<div class="alert alert-success alert-dismissible fade show mt-3" role="alert">
+						${sessionScope.mensaje}
+						<button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+					</div>
+					<c:remove var="mensaje" scope="session"/>
+				</c:if>
+				
+				<c:if test="${not empty sessionScope.error}">
+					<div class="alert alert-danger alert-dismissible fade show mt-3" role="alert">
+						${sessionScope.error}
+						<button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+					</div>
+					<c:remove var="error" scope="session"/>
+				</c:if>
+				
+				<!--  header con título y filtros -->
 				<div class="mt-5 d-flex justify-content-between align-items-center flex-wrap gap-2">
                      <div>
                          <h3 class="fw-bold">Gestión de Pedidos</h3>
+                         <!-- Added pedido count display -->
+                         <p class="text-muted mb-0">Total de pedidos: ${lista.size()}</p>
                      </div>
                      <div class="flex-shrink-0">
-	                     <c:if test="${usuario.rol == 'ADMIN' }">
-	                     	<a href="pedidos?opcion=editar" class="btn btn-secondary text-nowrap">
+	                     <!-- Only show new pedido button for ADMIN users -->
+	                     <c:if test="${sessionScope.usuario.rol == 'ADMIN'}">
+	                     	<a href="pedidos?opcion=editar" class="btn btn-primary text-nowrap">
 	                         	<i data-lucide="plus"></i> Nuevo Pedido
 	                         </a>
-	                     </c:if> 
+	                     </c:if>
                      </div>
                  </div>
                  
@@ -56,7 +71,7 @@
 						<form method="GET" action="pedidos" class="row g-3">
 							<div class="col-md-4">
 								<label class="form-label">Buscar</label>
-								<input type="text" class="form-control" name="texto" placeholder="Cliente, ID pedido..." value="${param.texto != null ? param.texto : ''}">
+								<input type="text" class="form-control" name="texto" placeholder="Cliente, ID pedido, comprobante..." value="${param.texto != null ? param.texto : ''}">
 							</div>
 							<div class="col-md-3">
 								<label class="form-label">Estado</label>
@@ -69,9 +84,18 @@
 									<option value="CANCELADO" ${param.estado == 'CANCELADO' ? 'selected' : ''}>Cancelado</option>
 								</select>
 							</div>
+							<%-- <div class="col-md-3">
+								<label class="form-label">Método de Pago</label>
+								<select class="form-select" name="metodoPago">
+									<option value="">Todos los métodos</option>
+									<option value="EFECTIVO" ${param.metodoPago == 'EFECTIVO' ? 'selected' : ''}>Efectivo</option>
+									<option value="TARJETA" ${param.metodoPago == 'TARJETA' ? 'selected' : ''}>Tarjeta</option>
+									<option value="TRANSFERENCIA" ${param.metodoPago == 'TRANSFERENCIA' ? 'selected' : ''}>Transferencia</option>
+								</select>
+							</div> --%>
 							<div class="col-md-2">
 								<label class="form-label">&nbsp;</label>
-								<button type="submit" class="btn btn-primary d-block">
+								<button type="submit" class="btn btn-primary d-block w-100">
 									<i data-lucide="search"></i> Buscar
 								</button>
 							</div>
@@ -84,67 +108,110 @@
 					<div class="card-body">
 						<div class="table-responsive">
 							<table class="table table-hover">
-								<thead>
+								<thead class="table-light">
 									<tr>
 										<th scope="col">ID</th>
+										<th scope="col">Comprobante</th>
 										<th scope="col">Cliente</th>
 										<th scope="col">Fecha</th>
 										<th scope="col">Estado</th>
+										<th scope="col">Método Pago</th>
 										<th scope="col">Total</th>
 										<th scope="col">Acciones</th>
 									</tr>
 								</thead>
 								<tbody>
-									<c:forEach items="${lista}" var="p">
-										<tr>
-											<th scope="row"># ${p.pedidoId}</th>
-											<td>${p.cliente}</td>
-											<td><fmt:formatDate value="${p.fechaPedido}" pattern="dd/MM/yyyy HH:mm"/></td>
-											<td>
-												<c:choose>
-													<c:when test="${p.estado == 'PENDIENTE'}"><span class="badge bg-warning">${p.estado}</span></c:when>
-													<c:when test="${p.estado == 'PROCESANDO'}"><span class="badge bg-info">${p.estado}</span></c:when>
-													<c:when test="${p.estado == 'EN_CAMINO'}"><span class="badge bg-primary">${p.estado}</span></c:when>
-													<c:when test="${p.estado == 'ENTREGADO'}"><span class="badge order-status-delivered">${p.estado}</span></c:when>
-													<c:when test="${p.estado == 'CANCELADO'}"><span class="badge bg-danger">${p.estado}</span></c:when>
-													<c:otherwise><span class="badge bg-secondary">${p.estado}</span></c:otherwise>
-												</c:choose>
-											</td>
-											<td>S/. <fmt:formatNumber value="${p.total}" type="number" minFractionDigits="2"/></td>
-											<td>
-												<div class="d-flex gap-1">
-													<a class="btn btn-sm btn-outline-primary" href="pedidos?opcion=detalles&id=${p.pedidoId }">
-														<i data-lucide="eye"></i> Ver
-													</a>
-													<%-- <% if ("ADMIN".equals(rol) || "MANAGER".equals(rol)) { %>
-													<a class="btn btn-sm btn-dark" href="pedidos?opcion=editar&id=<%=p.getPedidoId()%>">
-														<i data-lucide="edit"></i> Editar
-													</a>
-													<% } %> --%>
-													<c:if test="${(usuario.rol == 'ADMIN' or usuario.rol == 'MANAGER') and (p.estado != 'ENTREGADO' and p.estado != 'CANCELADO')}">
-														<div class="dropdown">
-															<button class="btn btn-sm btn-success dropdown-toggle" type="button" data-bs-toggle="dropdown">
-																<i data-lucide="refresh-cw"></i> Estado
-															</button>
-															<ul class="dropdown-menu">
-																<li><a class="dropdown-item" href="javascript:cambiarEstado(${p.pedidoId}, 'PENDIENTE')">Pendiente</a></li>
-																<li><a class="dropdown-item" href="javascript:cambiarEstado(${p.pedidoId}, 'PROCESANDO')">Procesando</a></li>
-																<li><a class="dropdown-item" href="javascript:cambiarEstado(${p.pedidoId}, 'EN_CAMINO')">En Camino</a></li>
-																<li><a class="dropdown-item" href="javascript:cambiarEstado(${p.pedidoId}, 'ENTREGADO')">Entregado</a></li>
-																<li><hr class="dropdown-divider"></li>
-																<li><a class="dropdown-item text-danger" href="javascript:cambiarEstado(${p.pedidoId}, 'CANCELADO')">Cancelar</a></li>
-															</ul>
+									<c:choose>
+										<c:when test="${empty lista}">
+											<tr>
+												<td colspan="8" class="text-center py-4">
+													<i data-lucide="inbox" class="mb-2"></i>
+													<p class="mb-0">No se encontraron pedidos</p>
+												</td>
+											</tr>
+										</c:when>
+										<c:otherwise>
+											<c:forEach items="${lista}" var="p">
+												<tr>
+													<th scope="row"># ${p.pedidoId}</th>
+													<!-- Added comprobante display -->
+													<td>
+														<small class="text-muted">${p.tipoComprobante}</small><br>
+														<strong>${p.numeroComprobante}</strong>
+													</td>
+													<td>
+														<strong>${p.cliente.nombre}</strong><br>
+														<small class="text-muted">${p.cliente.email}</small>
+													</td>
+													<td><fmt:formatDate value="${p.fechaPedido}" pattern="dd/MM/yyyy HH:mm"/></td>
+													<td>
+														<c:choose>
+															<c:when test="${p.estado == 'PENDIENTE'}"><span class="badge bg-warning text-dark">${p.estado}</span></c:when>
+															<c:when test="${p.estado == 'PROCESANDO'}"><span class="badge bg-info">${p.estado}</span></c:when>
+															<c:when test="${p.estado == 'EN_CAMINO'}"><span class="badge bg-primary">${p.estado}</span></c:when>
+															<c:when test="${p.estado == 'ENTREGADO'}"><span class="badge bg-success">${p.estado}</span></c:when>
+															<c:when test="${p.estado == 'CANCELADO'}"><span class="badge bg-danger">${p.estado}</span></c:when>
+															<c:otherwise><span class="badge bg-secondary">${p.estado}</span></c:otherwise>
+														</c:choose>
+													</td>
+													<!-- Added payment method display -->
+													<td>
+														<c:choose>
+															<c:when test="${p.metodoPago == 'EFECTIVO'}"><i data-lucide="banknote" class="me-1"></i></c:when>
+															<c:when test="${p.metodoPago == 'TARJETA'}"><i data-lucide="credit-card" class="me-1"></i></c:when>
+															<c:when test="${p.metodoPago == 'TRANSFERENCIA'}"><i data-lucide="smartphone" class="me-1"></i></c:when>
+														</c:choose>
+														${p.metodoPago}
+													</td>
+													<td>
+														<strong>S/. <fmt:formatNumber value="${p.total}" type="number" minFractionDigits="2"/></strong><br>
+														<small class="text-muted">IGV: S/. <fmt:formatNumber value="${p.igv}" type="number" minFractionDigits="2"/></small>
+													</td>
+													<td>
+														<div class="d-flex gap-1 flex-wrap">
+															<a class="btn btn-sm btn-outline-primary" href="pedidos?opcion=detalles&id=${p.pedidoId}" title="Ver detalles">
+																<i data-lucide="eye"></i>
+															</a>
+															
+															<!-- Enhanced role-based action buttons -->
+															<c:if test="${sessionScope.usuario.rol == 'ADMIN'}">
+																<a class="btn btn-sm btn-outline-secondary" href="pedidos?opcion=editar&pedidoId=${p.pedidoId}" title="Editar pedido">
+																	<i data-lucide="edit"></i>
+																</a>
+															</c:if>
+															
+															<c:if test="${(sessionScope.usuario.rol == 'ADMIN' or sessionScope.usuario.rol == 'MANAGER') and (p.estado != 'ENTREGADO' and p.estado != 'CANCELADO')}">
+																<div class="dropdown">
+																	<button class="btn btn-sm btn-success dropdown-toggle" type="button" data-bs-toggle="dropdown" title="Cambiar estado">
+																		<i data-lucide="refresh-cw"></i>
+																	</button>
+																	<ul class="dropdown-menu">
+																		<li><a class="dropdown-item" href="javascript:cambiarEstado(${p.pedidoId}, 'PENDIENTE')">
+																			<i data-lucide="clock" class="me-2"></i>Pendiente</a></li>
+																		<li><a class="dropdown-item" href="javascript:cambiarEstado(${p.pedidoId}, 'PROCESANDO')">
+																			<i data-lucide="loader" class="me-2"></i>Procesando</a></li>
+																		<li><a class="dropdown-item" href="javascript:cambiarEstado(${p.pedidoId}, 'EN_CAMINO')">
+																			<i data-lucide="truck" class="me-2"></i>En Camino</a></li>
+																		<li><a class="dropdown-item" href="javascript:cambiarEstado(${p.pedidoId}, 'ENTREGADO')">
+																			<i data-lucide="check-circle" class="me-2"></i>Entregado</a></li>
+																		<li><hr class="dropdown-divider"></li>
+																		<li><a class="dropdown-item text-danger" href="javascript:cambiarEstado(${p.pedidoId}, 'CANCELADO')">
+																			<i data-lucide="x-circle" class="me-2"></i>Cancelar</a></li>
+																	</ul>
+																</div>
+															</c:if>
+															
+															<c:if test="${sessionScope.usuario.rol == 'ADMIN'}">
+																<button class="btn btn-sm btn-danger" onclick="eliminar(${p.pedidoId})" title="Eliminar pedido">
+																	<i data-lucide="trash-2"></i>
+																</button>
+															</c:if>
 														</div>
-													</c:if>
-													<c:if test="${ usuario.rol == 'ADMIN' }">
-														<a class="btn btn-sm btn-danger" href="javascript:eliminar(${p.pedidoId })">
-															<i data-lucide="trash-2"></i> Eliminar
-														</a>
-													</c:if>
-												</div>
-											</td>
-										</tr>
-									</c:forEach>
+													</td>
+												</tr>
+											</c:forEach>
+										</c:otherwise>
+									</c:choose>
 								</tbody>
 							</table>
 						</div>
@@ -192,5 +259,7 @@
 	<script>
 		lucide.createIcons();
 	</script>
+	
+	
 </body>
 </html>

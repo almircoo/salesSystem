@@ -184,7 +184,6 @@ public class ReporteDAO implements IReporteDAO {
             String sql = "SELECT c.nombre, c.email, COUNT(p.pedido_id) as total_pedidos, " +
                         "SUM(p.total) as total_gastado " +
                         "FROM Cliente c INNER JOIN Pedido p ON c.cliente_id = p.cliente_id " +
-                        "WHERE c.estado = TRUE " +
                         "GROUP BY c.cliente_id " +
                         "ORDER BY total_pedidos DESC, total_gastado DESC " +
                         "LIMIT 10";

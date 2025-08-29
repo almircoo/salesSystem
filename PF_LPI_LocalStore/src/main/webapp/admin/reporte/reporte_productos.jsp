@@ -1,6 +1,10 @@
 <%@ page import="java.util.*" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+    
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -37,7 +41,7 @@
                 <br>
                 
                 <%
-				    List<Map<String, Object>> productosStockBajo = (List<Map<String, Object>>) request.getAttribute("productosStockBajo");
+				   /*  List<Map<String, Object>> productosStockBajo = (List<Map<String, Object>>) request.getAttribute("productosStockBajo"); */
 				%>
                 <!-- Productos con Stock Bajo -->
                 <div class="row mb-4">
@@ -50,57 +54,63 @@
                                 </h5>
                             </div>
                             <div class="card-body">
-                                <% if (productosStockBajo != null && !productosStockBajo.isEmpty()) { %>
-                                    <div class="table-responsive">
-                                        <table class="table table-striped table-hover">
-                                            <thead class="table-secondary">
-                                                <tr>
-                                                    <th class="text-dark">Producto</th>
-                                                    <th class="text-dark">Categoría</th>
-                                                    <th class="text-dark">Stock Actual</th>
-                                                    <th class="text-dark">Precio</th>
-                                                    <th class="text-dark">Estado</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <% for (Map<String, Object> producto : productosStockBajo) { %>
+                            	<c:choose>
+                                    <c:when test="${not empty productosStockBajo != null}">
+                                        <div class="table-responsive">
+                                            <table class="table table-striped table-hover">
+                                                <thead class="table-secondary">
                                                     <tr>
-                                                        <td><%= producto.get("nombre") %></td>
-                                                        <td><%= producto.get("categoria") %></td>
-                                                        <td>
-                                                            <span class="badge bg-danger">
-                                                                <%= producto.get("stock") %> unidades
-                                                            </span>
-                                                        </td>
-                                                        <td>S/ <%= String.format("%.2f", (Double) producto.get("precio")) %></td>
-                                                        <td>
-                                                            <% int stock = (Integer) producto.get("stock"); %>
-                                                            <% if (stock == 0) { %>
-                                                                <span class="badge bg-danger">Sin Stock</span>
-                                                            <% } else if (stock <= 2) { %>
-                                                                <span class="badge bg-danger">Crítico</span>
-                                                            <% } else { %>
-                                                                <span class="badge bg-warning">Bajo</span>
-                                                            <% } %>
-                                                        </td>
+                                                        <th class="text-dark">Producto</th>
+                                                        <th class="text-dark">Categoría</th>
+                                                        <th class="text-dark">Stock Actual</th>
+                                                        <th class="text-dark">Precio</th>
+                                                        <th class="text-dark">Estado</th>
                                                     </tr>
-                                                <% } %>
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                <% } else { %>
-                                    <div class="alert alert-success" role="alert">
-                                        <i class="fas fa-check-circle me-2"></i>
-                                        Excelente! Todos los productos tienen stock suficiente.
-                                    </div>
-                                <% } %>
+                                                </thead>
+                                                <tbody>
+                                                    <c:forEach var="producto" items="${productosStockBajo}">
+                                                        <tr>
+                                                            <td>${producto.nombre}</td>
+                                                            <td>${producto.categoria}</td>
+                                                            <td>
+                                                                <span class="badge bg-danger">
+                                                                    ${producto.stock} unidades
+                                                                </span>
+                                                            </td>
+                                                            <td>S/ <fmt:formatNumber value="${producto.precio}" pattern="#,##0.00"/></td>
+                                                            <td>
+                                                                <c:choose>
+                                                                    <c:when test="${producto.stock == 0}">
+                                                                        <span class="badge bg-danger">Sin Stock</span>
+                                                                    </c:when>
+                                                                    <c:when test="${producto.stock <= 2}">
+                                                                        <span class="badge bg-danger">Crítico</span>
+                                                                    </c:when>
+                                                                    <c:otherwise>
+                                                                        <span class="badge bg-warning">Bajo</span>
+                                                                    </c:otherwise>
+                                                                </c:choose>
+                                                            </td>
+                                                        </tr>
+                                                    </c:forEach>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <div class="alert alert-success" role="alert">
+                                            <i class="fas fa-check-circle me-2"></i>
+                                            Excelente! Todos los productos tienen stock suficiente.
+                                        </div>
+                                    </c:otherwise>
+                                </c:choose>
                             </div>
                         </div>
                     </div>
                 </div>
 
                 <!-- graficos -->
-                <% if (productosStockBajo != null && !productosStockBajo.isEmpty()) { %>
+                <c:if test="${not empty productosStockBajo}">
                 <div class="row">
                     <!-- Stock por Producto -->
                     <div class="col-md-6 mb-4">
@@ -117,7 +127,7 @@
                         </div>
                     </div>
 
-                    <!--   por Categoría -->
+                    <!-- por Categoría -->
                     <div class="col-md-6 mb-4">
                         <div class="card">
                             <div class="card-header">
@@ -132,14 +142,14 @@
                         </div>
                     </div>
                 </div>
-                <!-- Ess Resumida -->
+                <!-- Resumen de estadísticas -->
                 <div class="row">
                     <div class="col-md-3 mb-3">
                         <div class="card bg-danger text-white">
                             <div class="card-body">
                                 <div class="d-flex justify-content-between">
                                     <div>
-                                        <h4><%= productosStockBajo.size() %></h4>
+                                        <h4>${fn:length(productosStockBajo)}</h4>
                                         <p class="mb-0">Productos con Stock Bajo</p>
                                     </div>
                                     <div class="align-self-center">
@@ -156,13 +166,13 @@
                                 <div class="d-flex justify-content-between">
                                     <div>
                                         <h4>
-                                            <% 
-                                            int sinStock = 0;
-                                            for (Map<String, Object> producto : productosStockBajo) {
-                                                if ((Integer) producto.get("stock") == 0) sinStock++;
-                                            }
-                                            %>
-                                            <%= sinStock %>
+                                            <c:set var="sinStock" value="0" />
+                                            <c:forEach var="producto" items="${productosStockBajo}">
+                                                <c:if test="${producto.stock == 0}">
+                                                    <c:set var="sinStock" value="${sinStock + 1}" />
+                                                </c:if>
+                                            </c:forEach>
+                                            ${sinStock}
                                         </h4>
                                         <p class="mb-0">Sin Stock</p>
                                     </div>
@@ -180,13 +190,11 @@
                                 <div class="d-flex justify-content-between">
                                     <div>
                                         <h4>
-                                            <% 
-                                            double valorTotal = 0;
-                                            for (Map<String, Object> producto : productosStockBajo) {
-                                                valorTotal += (Integer) producto.get("stock") * (Double) producto.get("precio");
-                                            }
-                                            %>
-                                            S/ <%= String.format("%.0f", valorTotal) %>
+                                            <c:set var="valorTotal" value="0" />
+                                            <c:forEach var="producto" items="${productosStockBajo}">
+                                                <c:set var="valorTotal" value="${valorTotal + producto.stock * producto.precio}" />
+                                            </c:forEach>
+                                            S/ <fmt:formatNumber value="${valorTotal}" pattern="#,##0"/>
                                         </h4>
                                         <p class="mb-0">Valor en Stock Bajo</p>
                                     </div>
@@ -204,13 +212,13 @@
                                 <div class="d-flex justify-content-between">
                                     <div>
                                         <h4>
-                                            <% 
-                                            Set<String> categorias = new HashSet<>();
-                                            for (Map<String, Object> producto : productosStockBajo) {
-                                                categorias.add((String) producto.get("categoria"));
-                                            }
-                                            %>
-                                            <%= categorias.size() %>
+                                            <c:set var="categoriasAfectadas" value="${''}" />
+                                            <c:forEach var="producto" items="${productosStockBajo}">
+                                                <c:if test="${fn:indexOf(categoriasAfectadas, producto.categoria) == -1}">
+                                                    <c:set var="categoriasAfectadas" value="${categoriasAfectadas},${producto.categoria}" />
+                                                </c:if>
+                                            </c:forEach>
+                                            ${fn:length(fn:split(categoriasAfectadas, ',')) -1}
                                         </h4>
                                         <p class="mb-0">Categorías Afectadas</p>
                                     </div>
@@ -222,7 +230,8 @@
                         </div>
                     </div>
                 </div>
-                <% } %>
+                </c:if>
+               
                 
 			</div>
 		</div>
@@ -234,130 +243,110 @@
 	<script>
 		lucide.createIcons();
 	</script>
+	<c:if test="${not empty productosStockBajo}">
+	    <script>
+	        // Stock por Producto
+	        const stockCtx = document.getElementById('stockChart').getContext('2d');
+	        const stockChart = new Chart(stockCtx, {
+	            type: 'bar',
+	            data: {
+	                labels: [
+	                    <c:forEach var="producto" items="${productosStockBajo}" varStatus="loop">
+	                        '${producto.nombre}'<c:if test="${!loop.last}">,</c:if>
+	                    </c:forEach>
+	                ],
+	                datasets: [{
+	                    label: 'Stock Actual',
+	                    data: [
+	                        <c:forEach var="producto" items="${productosStockBajo}" varStatus="loop">
+	                            ${producto.stock}<c:if test="${!loop.last}">,</c:if>
+	                        </c:forEach>
+	                    ],
+	                    backgroundColor: function(context) {
+	                        const value = context.parsed.y;
+	                        if (value === 0) return '#dc3545';
+	                        if (value <= 2) return '#fd7e14';
+	                        return '#ffc107';
+	                    },
+	                    borderColor: '#495057',
+	                    borderWidth: 1
+	                }]
+	            },
+	            options: {
+	                responsive: true,
+	                maintainAspectRatio: false,
+	                plugins: {
+	                    legend: {
+	                        display: false
+	                    },
+	                    tooltip: {
+	                        callbacks: {
+	                            label: function(context) {
+	                                return 'Stock: ' + context.parsed.y + ' unidades';
+	                            }
+	                        }
+	                    }
+	                },
+	                scales: {
+	                    y: {
+	                        beginAtZero: true,
+	                        title: {
+	                            display: true,
+	                            text: 'Unidades en Stock'
+	                        }
+	                    },
+	                    x: {
+	                        title: {
+	                            display: true,
+	                            text: 'Productos'
+	                        }
+	                    }
+	                }
+	            }
+	        });
 	
-	 <% if (productosStockBajo != null && !productosStockBajo.isEmpty()) { %>
-    <script>
-        // Stock por Producto
-        const stockCtx = document.getElementById('stockChart').getContext('2d');
-        const stockChart = new Chart(stockCtx, {
-            type: 'bar',
-            data: {
-                labels: [
-                    <% for (int i = 0; i < productosStockBajo.size(); i++) { 
-                        Map<String, Object> producto = productosStockBajo.get(i);
-                    %>
-                        '<%= producto.get("nombre") %>'<%= i < productosStockBajo.size() - 1 ? "," : "" %>
-                    <% } %>
-                ],
-                datasets: [{
-                    label: 'Stock Actual',
-                    data: [
-                        <% for (int i = 0; i < productosStockBajo.size(); i++) { 
-                            Map<String, Object> producto = productosStockBajo.get(i);
-                        %>
-                            <%= producto.get("stock") %><%= i < productosStockBajo.size() - 1 ? "," : "" %>
-                        <% } %>
-                    ],
-                    backgroundColor: function(context) {
-                        const value = context.parsed.y;
-                        if (value === 0) return '#dc3545';
-                        if (value <= 2) return '#fd7e14';
-                        return '#ffc107';
-                    },
-                    borderColor: '#495057',
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: {
-                        display: false
-                    },
-                    tooltip: {
-                        callbacks: {
-                            label: function(context) {
-                                return 'Stock: ' + context.parsed.y + ' unidades';
-                            }
-                        }
-                    }
-                },
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                        title: {
-                            display: true,
-                            text: 'Unidades en Stock'
-                        }
-                    },
-                    x: {
-                        title: {
-                            display: true,
-                            text: 'Productos'
-                        }
-                    }
-                }
-            }
-        });
-
-        //   Categoría
-        const categoriaCtx = document.getElementById('categoriaChart').getContext('2d');
-        
-        // Aproductos por categoría
-        const categoriaData = {};
-        <% 
-        Map<String, Integer> categoriaCount = new HashMap<>();
-        for (Map<String, Object> producto : productosStockBajo) {
-            String categoria = (String) producto.get("categoria");
-            categoriaCount.put(categoria, categoriaCount.getOrDefault(categoria, 0) + 1);
-        }
-        %>
-        
-        const categoriaChart = new Chart(categoriaCtx, {
-            type: 'doughnut',
-            data: {
-                labels: [
-                    <% int index = 0; %>
-                    <% for (Map.Entry<String, Integer> entry : categoriaCount.entrySet()) { %>
-                        '<%= entry.getKey() %>'<%= index < categoriaCount.size() - 1 ? "," : "" %>
-                        <% index++; %>
-                    <% } %>
-                ],
-                datasets: [{
-                    data: [
-                        <% index = 0; %>
-                        <% for (Map.Entry<String, Integer> entry : categoriaCount.entrySet()) { %>
-                            <%= entry.getValue() %><%= index < categoriaCount.size() - 1 ? "," : "" %>
-                            <% index++; %>
-                        <% } %>
-                    ],
-                    backgroundColor: [
-                        '#ff6384', '#36a2eb', '#ffce56', '#4bc0c0', 
-                        '#9966ff', '#ff9f40', '#ff6384', '#c9cbcf'
-                    ],
-                    borderWidth: 2,
-                    borderColor: '#fff'
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: {
-                        position: 'bottom'
-                    },
-                    tooltip: {
-                        callbacks: {
-                            label: function(context) {
-                                return context.label + ': ' + context.parsed + ' productos';
-                            }
-                        }
-                    }
-                }
-            }
-        });
-    </script>
-    <% } %>
+	        // por Categoría
+	        const categoriaCtx = document.getElementById('categoriaChart').getContext('2d');
+	        
+	        // Agrupar productos por categoría y contar
+	        let categoriaCount = {};
+	        <c:forEach var="producto" items="${productosStockBajo}">
+	            let categoria = '${producto.categoria}';
+	            categoriaCount[categoria] = (categoriaCount[categoria] || 0) + 1;
+	        </c:forEach>
+	        
+	        const categoriaChart = new Chart(categoriaCtx, {
+	            type: 'doughnut',
+	            data: {
+	                labels: Object.keys(categoriaCount),
+	                datasets: [{
+	                    data: Object.values(categoriaCount),
+	                    backgroundColor: [
+	                        '#ff6384', '#36a2eb', '#ffce56', '#4bc0c0', 
+	                        '#9966ff', '#ff9f40', '#ff6384', '#c9cbcf'
+	                    ],
+	                    borderWidth: 2,
+	                    borderColor: '#fff'
+	                }]
+	            },
+	            options: {
+	                responsive: true,
+	                maintainAspectRatio: false,
+	                plugins: {
+	                    legend: {
+	                        position: 'bottom'
+	                    },
+	                    tooltip: {
+	                        callbacks: {
+	                            label: function(context) {
+	                                return context.label + ': ' + context.parsed + ' productos';
+	                            }
+	                        }
+	                    }
+	                }
+	            }
+	        });
+	    </script>
+    </c:if>
 </body>
 </html>

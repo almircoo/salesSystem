@@ -4,6 +4,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import entidades.DetallePedido;
+import entidades.Producto;
 import interfaces.IDetallePedidoDAO;
 import db.MySQLConexion;
 
@@ -62,10 +63,15 @@ public class DetallePedidoDAO implements IDetallePedidoDAO {
 						rs.getInt("detalle_id"),
 						rs.getInt("pedido_id"),
 						rs.getInt("producto_id"),
-						rs.getString("producto_nombre"),
 						rs.getInt("cantidad"),
 						rs.getDouble("precio_unitario"),
 						rs.getDouble("subtotal"));
+				
+				Producto producto = new Producto();
+				producto.setProductoId(rs.getInt("producto_id"));
+				producto.setNombre(rs.getString("producto_nombre"));
+				detalle.setProducto(producto);
+				
 				lista.add(detalle);
 			}
 		} catch (Exception e) {
@@ -79,7 +85,7 @@ public class DetallePedidoDAO implements IDetallePedidoDAO {
 
 	@Override
 	public DetallePedido obtener(int id) {
-		DetallePedido detalle = null;		
+		DetallePedido detalle = null;
 		Connection con = null;
 		PreparedStatement ps = null;
 		ResultSet rs = null;
@@ -91,22 +97,54 @@ public class DetallePedidoDAO implements IDetallePedidoDAO {
 			ps = con.prepareStatement(sql);
 			ps.setInt(1, id);
 			rs = ps.executeQuery();
-			
+
 			if (rs.next()) {
 				detalle = new DetallePedido(
 						rs.getInt("detalle_id"),
 						rs.getInt("pedido_id"),
 						rs.getInt("producto_id"),
-						rs.getString("producto_nombre"),
 						rs.getInt("cantidad"),
 						rs.getDouble("precio_unitario"),
 						rs.getDouble("subtotal"));
+
+				Producto producto = new Producto();
+				producto.setProductoId(rs.getInt("producto_id"));
+				producto.setNombre(rs.getString("producto_nombre"));
+				detalle.setProducto(producto);
 			}
 		} catch (Exception e) {
 			System.out.println("Error al obtener detalle pedido: " + e.getMessage());
 		} finally {
 			MySQLConexion.closeConexion(con);
 		}
+		
+//		DetallePedido detalle = null;		
+//		Connection con = null;
+//		PreparedStatement ps = null;
+//		ResultSet rs = null;
+//		try {
+//			con = MySQLConexion.getConexion();
+//			String sql = "SELECT dp.*, p.nombre as producto_nombre FROM DetallePedido dp " +
+//						"INNER JOIN producto p ON dp.producto_id = p.producto_id " +
+//						"WHERE dp.detalle_id = ?";
+//			ps = con.prepareStatement(sql);
+//			ps.setInt(1, id);
+//			rs = ps.executeQuery();
+//			
+//			if (rs.next()) {
+//				detalle = new DetallePedido(
+//						rs.getInt("detalle_id"),
+//						rs.getInt("pedido_id"),
+//						rs.getInt("producto_id"),
+//						rs.getInt("cantidad"),
+//						rs.getDouble("precio_unitario"),
+//						rs.getDouble("subtotal"));
+//			}
+//		} catch (Exception e) {
+//			System.out.println("Error al obtener detalle pedido: " + e.getMessage());
+//		} finally {
+//			MySQLConexion.closeConexion(con);
+//		}
 		
 		return detalle;
 	}
@@ -175,10 +213,14 @@ public class DetallePedidoDAO implements IDetallePedidoDAO {
 						rs.getInt("detalle_id"),
 						rs.getInt("pedido_id"),
 						rs.getInt("producto_id"),
-						rs.getString("producto_nombre"),
 						rs.getInt("cantidad"),
 						rs.getDouble("precio_unitario"),
 						rs.getDouble("subtotal"));
+				Producto producto = new Producto();
+				producto.setProductoId(rs.getInt("producto_id"));
+				producto.setNombre(rs.getString("producto_nombre"));
+				detalle.setProducto(producto);
+
 				lista.add(detalle);
 			}
 		} catch (Exception e) {
